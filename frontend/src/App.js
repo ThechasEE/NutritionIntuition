@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import './App.css';
 
-import LoginPage from './pages/LoginPage';
+import LoginRegisterPage from './pages/LoginRegisterPage';
 import CardPage from './pages/CardPage';
 
 function App()
@@ -11,7 +11,7 @@ function App()
         <Router >
             <Switch>
                 <Route path="/" exact>
-                    <LoginPage />
+                    <LoginRegisterPage />
                 </Route>
                 <Route path="/cards" exact>
                     <CardPage />
