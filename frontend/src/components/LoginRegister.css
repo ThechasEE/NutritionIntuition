@@ -12,7 +12,12 @@
 
 .button-wide
 {
-    width: 370px;
+    width: 355px;
+}
+
+.button-extra-wide
+{
+    width: 450px;
 }
 
 /*==========================
@@ -34,7 +39,7 @@
 	box-shadow: 10px 8px 10pt 2pt rgba(0,0,0,0.4);
 	border-radius: 20px;
     border: 5px solid var(--mint-green);
-    width: 400px;
+    width: 380px;
     margin: 10px;
 }
 
@@ -103,8 +108,13 @@
 		MEDIA QUERIES
 ==========================*/
 
-@media only screen and (max-width: 1600px)
+@media only screen and (max-width: 1200px)
 {
+    .button-extra-wide
+    {
+        width: 380px;
+    }
+
     #register-form
     {
         display: flex;
@@ -114,7 +124,7 @@
         box-shadow: 10px 8px 10pt 2pt rgba(0,0,0,0.4);
         border-radius: 20px;
         border: 5px solid var(--mint-green);
-        width: 400px;
+        width: 380px;
         margin: 10px;
     }
 
@@ -131,8 +141,13 @@
     }
 }
 
-@media only screen and (max-height: 750px)
+@media only screen and (max-height: 800px)
 {
+    .button-extra-wide
+    {
+        width: 380px;
+    }
+
     #register-form
     {
         display: flex;
@@ -142,7 +157,7 @@
         box-shadow: 10px 8px 10pt 2pt rgba(0,0,0,0.4);
         border-radius: 20px;
         border: 5px solid var(--mint-green);
-        width: 400px;
+        width: 380px;
         margin: 10px;
     }
 

@@ -89,7 +89,7 @@ function LoginRegister()
     (
         <form id="login-form" onSubmit={doLogin}>
             <img id="login-image" src={logo}/>
-            <input class="input" type="text" placeholder="Email" ref={(c) => loginEmail = c}/>
+            <input class="input" type="text" placeholder="Username" ref={(c) => loginEmail = c}/>
             <input class="input" type="password" placeholder="Password" ref={(c) => loginPassword = c}/>
             <button id="login-submit" type="submit" onClick={doLogin}>Log In</button>
             <div class="form-error-text">{loginMessage}</div>
@@ -121,8 +121,10 @@ function LoginRegister()
                 </div>
             </section>
             <div class="form-error-text">{registerMessage}</div>
-            <input type="submit" id="register-submit" value="Register" onClick={doRegister}/>
-            <button class="change-form-button" type="submit" onClick={onClick}>Back to Login</button>
+            <div>
+                <input class="button-extra-wide" type="submit" id="register-submit" value="Register" onClick={doRegister}/>
+                <button class="change-form-button button-extra-wide" type="submit" onClick={onClick}>Back to Login</button>
+            </div>
         </form>
     )
 
