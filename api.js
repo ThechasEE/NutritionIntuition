@@ -68,4 +68,90 @@ app.post('/api/register', async (req, res, next) =>
         //var ret = { id:id, firstName:fn, lastName:ln, error:error};  
         res.status(200).json(ret);
     });
+    
+    app.post('/api/viewprofile', async (req, res, next) =>
+    {
+        // incoming: userId and jwtToken
+        // outgoing: firstName, lastName, age, weight, goalWeight, calorieGoal, height, gender, refreshedToken, error
+
+        var error = '';
+        var id = -1;
+        var firstName = '';
+        var lastName = '';
+        var age = '';
+        var weight = '';
+        var goalWeight = '';
+        var calorieGoal = '';
+        var height = '';
+        var gender = '';
+
+        const { userId, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const results = await db.collection('Users').find({"_id":ObjectId(userId)}).toArray();   
+        if( results.length > 0 )  
+        {   
+            firstName = results[0].FirstName;
+            lastName = results[0].LastName;
+            age = results[0].Age;
+            weight = results[0].Weight;
+            goalWeight = results[0].GoalWeight;
+            calorieGoal = results[0].CalorieGoal;
+            height = results[0].Height;
+            gender = results[0].Gender;
+        }
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { firstName:firstName, lastName:lastName, age:age, weight:weight, goalWeight:goalWeight, calorieGoal:calorieGoal, height:height, gender:gender, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
+
+    app.post('/api/updateprofile', async (req, res, next) =>
+    {
+        // incoming: userId, firstName, lastName, calorieGoal, age, weight, goalWeight, height, gender, jwtToken
+        // outgoing: id, refreshedToken, error
+        
+        var error = '';
+        var id = 0;
+
+        const { firstName, lastName, calorieGoal, age, weight, goalWeight, height, gender, userId, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const results = await db.collection('Users').updateOne(
+            {"_id":ObjectId(userId)},
+            { $set: {"FirstName":firstName, 
+                     "LastName":lastName,
+                     "CalorieGoal":calorieGoal,
+                     "Age":age,
+                     "Weight":weight,
+                     "GoalWeight":goalWeight,
+                     "Height":height,
+                     "Gender":gender}});
+
+        if (results.matchedCount < 1)
+        {
+            error = "Update Failed";
+            id = -1;
+        }
+        else
+        {
+            id = 1;
+        }
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { id:id, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
 }
