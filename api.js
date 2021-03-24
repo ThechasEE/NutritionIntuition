@@ -154,4 +154,66 @@ app.post('/api/register', async (req, res, next) =>
         var ret = { id:id, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
+    
+    app.post('/api/addmealtime', async (req, res, next) =>
+    {  
+        // incoming: userId, meals (array of json objects), jwtToken
+        // outgoing: error  
+        var id = -1;
+        const { userId, meals, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+        var r = {id:id, error:'The JWT is no longer valid'};
+        res.status(200).json(r);
+        return;
+        }
+
+        var dat = Date.now();
+        const newmealtime = {UserId:userId, Date: new Date(dat), Meals:meals};  
+        var error = '';  
+
+        const db = client.db();
+        const check = await db.collection('Mealtime').find({"UserId":userId}).sort({$natural:-1}).limit(1).toArray();
+        
+        if (check.length > 0)
+        {
+            var datTest = check[0].Date.toDateString();
+            var datToday = new Date(dat).toDateString();
+            if (datTest === datToday)
+            {
+                error = "Mealtime already created today"
+                id = -1;
+            }
+            else
+            {
+                try  
+                {               
+                    const result = await db.collection('Mealtime').insertOne(newmealtime);
+                    id = result.insertedId;
+                }  
+                catch(e)  
+                {    
+                    error = e.toString();  
+                }
+            }
+        }
+        else
+        {
+            try  
+            {               
+                const result = await db.collection('Mealtime').insertOne(newmealtime);
+                id = result.insertedId;
+            }  
+            catch(e)  
+            {    
+                error = e.toString();  
+            }
+        }
+
+        //cardList.push( card );
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { id:id, token:refreshedToken, error:error };  
+        res.status(200).json(ret);
+    });
 }
