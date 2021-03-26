@@ -7,6 +7,11 @@
     color: var(--dark-green);
 }
 
+.spacing
+{
+    margin-top: 12px;
+}
+
 .image
 {
     margin-bottom: 20px;
