@@ -86,19 +86,35 @@ function LoginRegister()
     {
         event.stopPropagation();
         event.preventDefault();
-        setLoginMessage('');
+        setLoginMessage("");
 
-        var obj = {login:Variables.loginVars.username.value, password:Variables.loginVars.password.value};
+        // Check for any empty entries.
+        if (Variables.loginVars.username.value.trim() === "")
+        {
+            setLoginMessage("No Username provided");
+            return false;
+        }
+        else if (Variables.loginVars.password.value.trim() === "")
+        {
+            setLoginMessage("No Password provided");
+            return false;
+        }
+
+        // Login object to send.
+        var obj = {
+            login: Variables.loginVars.username.value,
+            password: Variables.loginVars.password.value
+        };
         var json = JSON.stringify(obj);
 
         try
         {
-            const response = await fetch(bp.buildPath('api/login'), {method:'POST', body:json,headers:{'Content-Type': 'application/json'}});
+            const response = await fetch(bp.buildPath("api/login"), {method:"POST", body:json,headers:{"Content-Type": "application/json"}});
             var responseObj = JSON.parse(await response.text());
             
-            if( responseObj.id <= 0 )
+            if (responseObj.id <= 0)
             {                
-                setLoginMessage('User/Password combination incorrect');
+                setLoginMessage("User/Password combination incorrect");
             }
             else
             {
@@ -106,8 +122,8 @@ function LoginRegister()
                 //localStorage.setItem('user_data', JSON.stringify(user));
                 //console.log(res);
                 storage.storeToken(responseObj);
-                setLoginMessage('');
-                window.location.href = '/cards';
+                setLoginMessage("");
+                window.location.href = "/cards";
             }
         }
         catch(e)
@@ -227,7 +243,7 @@ function LoginRegister()
             return false;
         }
 
-        // Object to send.
+        // Registration object to send.
         var obj = {
             login: Variables.registerVars.username.value,
             email: Variables.registerVars.email.value,
@@ -241,16 +257,16 @@ function LoginRegister()
             height: Number(Variables.registerVars.height.value),
             gender: Variables.registerVars.gender.value.toLowerCase()
         };
-        var js = JSON.stringify(obj);
+        var json = JSON.stringify(obj);
 
         try
         {
-            const response = await fetch(bp.buildPath('api/register'), {method:'POST',body:js,headers:{'Content-Type': 'application/json'}});
-            var res = JSON.parse(await response.text());
+            const response = await fetch(bp.buildPath("api/register"), {method:"POST", body:json, headers:{"Content-Type": "application/json"}});
+            var responseObj = JSON.parse(await response.text());
 
-            if( res.id <= 0 )
+            if (responseObj.id <= 0)
             {
-                setRegisterGoalMessage('User already exists');
+                setRegisterGoalMessage("User already exists");
                 return false;
             }
 
@@ -269,11 +285,11 @@ function LoginRegister()
     (
         <form className="login-register-form">
             <img className="image" src={logo} alt="Not found"/>
-            <input className="input" type="text" placeholder="Username" ref={(c) => (c !== null) ? Variables.loginVars.username = c : null} value={Variables.loginVars.username === null ? "" : Variables.loginVars.username.value}/>
-            <input className="input" type="password" placeholder="Password" ref={(c) => (c !== null) ? Variables.loginVars.password = c : null} value={Variables.loginVars.password === null ? "" : Variables.loginVars.password.value}/>
+            <input className="input" type="text" placeholder="Username" ref={(c) => (c !== null) ? Variables.loginVars.username = c : null} defaultValue={Variables.loginVars.username === null ? "" : Variables.loginVars.username.value}/>
+            <input className="input" type="password" placeholder="Password" ref={(c) => (c !== null) ? Variables.loginVars.password = c : null} defaultValue={Variables.loginVars.password === null ? "" : Variables.loginVars.password.value}/>
             <button className="login-register-submit" type="submit" onClick={doLogin}>Log In</button>
             <div><a className="link" href="/#" onClick={forgotPassword}>Forgot Password?</a></div>
-            <div className="form-error-text">{loginMessage}</div>
+            <div className="form-error-text spacing">{loginMessage}</div>
             <div className="form-text">Don't have an account? Register below and look forward to a healthier future!</div>
             <button className="login-register-button-big" type="submit" onClick={toggleFormLoginSetup}>Register</button>
         </form>
