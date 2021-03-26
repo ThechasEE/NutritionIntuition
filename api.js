@@ -246,4 +246,32 @@ app.post('/api/register', async (req, res, next) =>
         var ret = { id:id, token:refreshedToken, error:error };  
         res.status(200).json(ret);
     });
+    
+    app.post('/api/searchmealtime', async (req, res, next) => 
+    {  
+        // incoming: userId, range (of results wanted [7/30/365 etc]), jwtToken
+        // outgoing: results[], error  
+        var error = '';  
+        const { userId, range, jwtToken } = req.body; 
+        
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();
+        var dat2 = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
+        const results = await db.collection('Mealtime').find({"Date":{$gt: dat2}, "UserId":userId}).toArray();
+        var _ret = [];
+        for( var i=0; i<results.length; i++ )  
+        {    
+            _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "Meals":results[i].Meals});  
+        }
+        refreshedToken = jwt.refresh(jwtToken).accessToken;
+        var ret = {results:_ret, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
 }
