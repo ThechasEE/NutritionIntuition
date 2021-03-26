@@ -268,7 +268,7 @@ app.post('/api/register', async (req, res, next) =>
         var _ret = [];
         for( var i=0; i<results.length; i++ )  
         {    
-            _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "Meals":results[i].Meals});  
+            _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "mealtimeId":results[i]._id, "Meals":results[i].Meals});  
         }
         refreshedToken = jwt.refresh(jwtToken).accessToken;
         var ret = {results:_ret, token:refreshedToken, error:error};  
