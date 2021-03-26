@@ -69,6 +69,34 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
     });
     
+    app.post('/api/checkusernameemail', async (req, res, next) => 
+    {  
+        // incoming: login, email  
+        // outgoing: id, error  
+        var error = '';  
+        const { login, email } = req.body;  
+
+        const db = client.db();  
+        const results1 = await db.collection('Users').find({Login:login}).toArray();
+        const results2 = await db.collection('Users').find({Email:email}).toArray();
+
+        var id = 1;
+        var ret;  
+        
+        if( results1.length > 0 || results2.length > 0)  
+        {
+            id = -1;
+            error = "Username or Email already in use."
+            ret = {id:id, error:error}
+        }
+        else 
+        {
+            ret = {id:id, error:error}
+        }
+
+        res.status(200).json(ret);
+    });
+    
     app.post('/api/viewprofile', async (req, res, next) =>
     {
         // incoming: userId and jwtToken
