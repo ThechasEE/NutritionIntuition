@@ -168,9 +168,39 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(r);
         return;
         }
+        
+        var totalCal = 0;
+        var totalFat = 0;
+        var totalSodium = 0;
+        var totalCarbs = 0;
+        var totalProtein = 0;
+
+        for (let index = 0; index < meals.length; index++) 
+        {
+            if (meals[index].Calories > 0)
+            {
+                totalCal += meals[index].Calories;
+            }
+            if (meals[index].totalFat)
+            {
+                totalFat += meals[index].totalFat;
+            }
+            if (meals[index].sodium > 0)
+            {
+                totalSodium += meals[index].sodium;
+            }
+            if (meals[index].totalCarbs > 0)
+            {
+                totalCarbs += meals[index].totalCarbs;
+            }
+            if (meals[index].protein > 0)
+            {
+                totalProtein += meals[index].protein;
+            }
+        }
 
         var dat = Date.now();
-        const newmealtime = {UserId:userId, Date: new Date(dat), Meals:meals};  
+        const newmealtime = {UserId:userId, Date: new Date(dat), totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:meals};  
         var error = '';  
 
         const db = client.db();
