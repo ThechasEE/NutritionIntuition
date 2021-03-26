@@ -274,4 +274,44 @@ app.post('/api/register', async (req, res, next) =>
         var ret = {results:_ret, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
+    
+    app.post('/api/viewmealtime', async (req, res, next) =>
+    {
+        // incoming: mealtimeId, jwtToken
+        // outgoing: mealtimeId (as id), totalCal, totalFat, totalSodium, totalCarbs, totalProtein, meals[], token, error
+        
+        var error = '';
+        var id = -1;
+        var totalCal = 0;
+        var totalFat = 0;
+        var totalSodium = 0;
+        var totalCarbs = 0;
+        var totalProtein = 0;
+        var meals = [];
+        
+        const { mealtimeId, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const results = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        if( results.length > 0 )  
+        {    
+            id = results[0]._id;    
+            totalCal = results[0].totalCalCount;
+            totalFat = results[0].totalFatCount;
+            totalSodium = results[0].totalSodiumCount;
+            totalCarbs = results[0].totalCarbCount;
+            totalProtein = results[0].totalProteinCount;
+            meals = results[0].Meals;
+        }
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { id:id, totalCal:totalCal, totalFat:totalFat, totalSodium:totalSodium, totalCarbs:totalCarbs, totalProtein:totalProtein, meals:meals, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
 }
