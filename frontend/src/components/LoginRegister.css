@@ -1,35 +1,18 @@
-.change-form-button
-{
-    color: #FFFFFF;
-	background-color: var(--mint-green);
-	font-size: 20px;
-	font-weight: bold;
-	padding: 24px;
-	margin: 12px 0px;
-	border-radius: 5px;
-	border: 0px solid var(--off-white);
-}
-
-.button-wide
-{
-    width: 355px;
-}
-
-.button-extra-wide
-{
-    width: 450px;
-}
-
 /*==========================
-		    LOGIN
+		    SHARED
 ==========================*/
 
-#login-image
+.link
+{
+    color: var(--dark-green);
+}
+
+.image
 {
     margin-bottom: 20px;
 }
 
-#login-form
+.login-register-form
 {
     
 	display: flex;
@@ -43,9 +26,9 @@
     margin: 10px;
 }
 
-#login-submit
+.login-register-submit
 {
-	color: #FFFFFF;
+	color: var(--off-white);
 	background-color: var(--mint-green);
 	font-size: 20px;
 	font-weight: bold;
@@ -53,123 +36,61 @@
 	margin: 12px 0px;
 	border-radius: 5px;
 	border: 0px solid var(--off-white);
+}
+
+.login-register-button-big
+{
+    color: var(--off-white);
+	background-color: var(--mint-green);
+	font-size: 20px;
+	font-weight: bold;
+	padding: 24px;
+	margin: 12px 0px;
+	border-radius: 5px;
+	border: 0px solid var(--mint-green);
 }
 
 /*==========================
 		    REGISTER
 ==========================*/
 
-#register-image
+.register-header
 {
-    margin-bottom: 20px;
-    max-width: 300px;
+    color: var(--mint-green);
+    font-size: 30px;
+    font-weight: bold;
+    margin: 12px;
 }
 
-#register-form
+.register-text
 {
-	display: flex;
-	flex-direction: column;
-	background-color: var(--dark-blue);
-	padding: 2em;
-	box-shadow: 10px 8px 10pt 2pt rgba(0,0,0,0.4);
-	border-radius: 20px;
-    border: 5px solid var(--mint-green);
-    width: 800px;
-    margin: 10px;
-    align-items: stretch;
-    justify-items: stretch;
+    color: var(--off-white);
+    font-size: 30px;
+    font-weight: bold;
+    margin: 12px;
+    margin-top: 24px;
 }
 
-#register-fields
+.register-subtext
 {
-    display: flex;
-	flex-direction: row;
+    color: var(--off-white);
+    font-size: 20px;
+    margin-bottom: 24px;
 }
 
-#register-image
+.register-back
 {
-    margin-bottom: 20px;
-    max-width: 500px;
+    background-color: var(--error);
 }
 
-#register-submit
+#register-dropdown
 {
-	color: #FFFFFF;
-	background-color: var(--mint-green);
+    text-align-last: center;
+	color: rgba(0,0,0,0.65);
 	font-size: 20px;
-	font-weight: bold;
 	padding: 12px;
 	margin: 12px 0px;
 	border-radius: 5px;
-	border: 0px solid var(--off-white);
-}
-
-/*==========================
-		MEDIA QUERIES
-==========================*/
-
-@media only screen and (max-width: 1200px)
-{
-    .button-extra-wide
-    {
-        width: 380px;
-    }
-
-    #register-form
-    {
-        display: flex;
-        flex-direction: column;
-        background-color: var(--dark-blue);
-        padding: 2em;
-        box-shadow: 10px 8px 10pt 2pt rgba(0,0,0,0.4);
-        border-radius: 20px;
-        border: 5px solid var(--mint-green);
-        width: 380px;
-        margin: 10px;
-    }
-
-    #register-fields
-    {
-        display: flex;
-        flex-direction: column;
-    }
-
-    #register-image
-    {
-        margin-bottom: 20px;
-        width: 400px;
-    }
-}
-
-@media only screen and (max-height: 800px)
-{
-    .button-extra-wide
-    {
-        width: 380px;
-    }
-
-    #register-form
-    {
-        display: flex;
-        flex-direction: column;
-        background-color: var(--dark-blue);
-        padding: 2em;
-        box-shadow: 10px 8px 10pt 2pt rgba(0,0,0,0.4);
-        border-radius: 20px;
-        border: 5px solid var(--mint-green);
-        width: 380px;
-        margin: 10px;
-    }
-
-    #register-fields
-    {
-        display: flex;
-        flex-direction: column;
-    }
-
-    #register-image
-    {
-        margin-bottom: 20px;
-        width: 400px;
-    }
+	background-color: var(--off-white);
+	border: 0px solid var(--dark-blue);
 }
