@@ -1,15 +1,3 @@
-/* CSS VARIABLES */
-:root
-{
-	--dark-blue: #05386B;
-	--dark-green: #379683;
-	--mint-green: #5CDB95;
-    --off-green: #8EE4AF;
-    --off-white: #EDF5E1;
-    --input-text: #000000;
-    --error: #FF0000;
-}
-
 #body
 {
 	line-height: 1.6em;

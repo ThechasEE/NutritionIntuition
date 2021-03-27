@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import './App.css';
+import './Shared.css';
 
 import LoginRegisterPage from './pages/LoginRegisterPage';
 import CardPage from './pages/CardPage';
