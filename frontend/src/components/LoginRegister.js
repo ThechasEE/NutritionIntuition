@@ -173,6 +173,30 @@ function LoginRegister()
             setRegisterSetupMessage("Passwords do not match");
             return false;
         }
+
+        // Email/username checking.
+        var obj = {
+            login: Variables.registerVars.username.value,
+            email: Variables.registerVars.email.value,
+        };
+        var json = JSON.stringify(obj);
+
+        try
+        {
+            const response = await fetch(bp.buildPath("api/checkusernameemail"), {method:"POST", body:json, headers:{"Content-Type": "application/json"}});
+            var responseObj = JSON.parse(await response.text());
+
+            if (responseObj.id <= 0)
+            {
+                setRegisterSetupMessage(responseObj.error);
+                return false;
+            }
+        }
+        catch(e)
+        {
+            setRegisterSetupMessage(e.toString());
+            return false;
+        }
         
         // No errors reported.
         setForm("RegisterPersonal");
