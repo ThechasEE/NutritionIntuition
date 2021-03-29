@@ -342,4 +342,145 @@ app.post('/api/register', async (req, res, next) =>
         var ret = { id:id, totalCal:totalCal, totalFat:totalFat, totalSodium:totalSodium, totalCarbs:totalCarbs, totalProtein:totalProtein, meals:meals, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
+	
+	app.post('/api/addmeals', async (req, res, next) =>
+    {  
+        // incoming: mealtimeId, meals (array of json objects), jwtToken
+        // outgoing: error  
+        
+		var error = '';
+        var id = -1;
+        var totalCal = 0;
+        var totalFat = 0;
+        var totalSodium = 0;
+        var totalCarbs = 0;
+        var totalProtein = 0;
+        var mealsNew = [];
+        
+        const { mealtimeId, meals, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const find = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        if( find.length > 0 )  
+        {    
+            id = find[0]._id;    
+            totalCal = find[0].totalCalCount;
+            totalFat = find[0].totalFatCount;
+            totalSodium = find[0].totalSodiumCount;
+            totalCarbs = find[0].totalCarbCount;
+            totalProtein = find[0].totalProteinCount;
+            newMeals = find[0].Meals;
+        }
+		
+		for (let index = 0; index < meals.length; index++) 
+        {
+            if (meals[index].Calories > 0)
+            {
+                totalCal += meals[index].Calories;
+            }
+            if (meals[index].totalFat)
+            {
+                totalFat += meals[index].totalFat;
+            }
+            if (meals[index].sodium > 0)
+            {
+                totalSodium += meals[index].sodium;
+            }
+            if (meals[index].totalCarbs > 0)
+            {
+                totalCarbs += meals[index].totalCarbs;
+            }
+            if (meals[index].protein > 0)
+            {
+                totalProtein += meals[index].protein;
+            }
+        }
+		
+		newMeals = newMeals.concat(meals);
+		
+		var query = { _id: id };
+		var newvalues = { $set: {totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:newMeals} };
+		
+		const result = await db.collection('Mealtime').updateOne(query, newvalues);
+		
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { error:error, token:refreshedToken };  
+        res.status(200).json(ret);
+    });
+	
+	app.post('/api/removemeal', async (req, res, next) =>
+    {  
+        // incoming: mealtimeId, index (index of item to delete in meals array), jwtToken
+        // outgoing: error  
+        
+		var error = '';
+        var id = -1;
+        var totalCal = 0;
+        var totalFat = 0;
+        var totalSodium = 0;
+        var totalCarbs = 0;
+        var totalProtein = 0;
+        var meals = [];
+        
+        const { mealtimeId, index, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const find = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        if( find.length > 0 )  
+        {    
+            id = find[0]._id;    
+            totalCal = find[0].totalCalCount;
+            totalFat = find[0].totalFatCount;
+            totalSodium = find[0].totalSodiumCount;
+            totalCarbs = find[0].totalCarbCount;
+            totalProtein = find[0].totalProteinCount;
+            meals = find[0].Meals;
+        }
+		
+		if (meals[index].Calories > 0)
+		{
+			totalCal -= meals[index].Calories;
+		}
+		if (meals[index].totalFat)
+		{
+			totalFat -= meals[index].totalFat;
+		}
+		if (meals[index].sodium > 0)
+		{
+			totalSodium -= meals[index].sodium;
+		}
+		if (meals[index].totalCarbs > 0)
+		{
+			totalCarbs -= meals[index].totalCarbs;
+		}
+		if (meals[index].protein > 0)
+		{
+			totalProtein -= meals[index].protein;
+		}
+		
+		meals.splice(index, 1);
+		
+		var query = { _id: id };
+		var newvalues = { $set: {totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:meals} };
+		
+		const result = await db.collection('Mealtime').updateOne(query, newvalues);
+		
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { error:error, token:refreshedToken };  
+        res.status(200).json(ret);
+    });
 }
