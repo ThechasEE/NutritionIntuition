@@ -2,9 +2,157 @@
 {
 	--dark-blue: #05386B;
 	--dark-green: #379683;
-	--mint-green: #5CDB95;
+	--mint-green: #5cdb95;
     --off-green: #8EE4AF;
     --off-white: #EDF5E1;
     --input-text: #000000;
     --error: #FF0000;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+* {
+
+    margin: 0;
+
+    font-family: "Quicksand";
+
+    color: #333;
+
+}
+
+.content {
+
+    max-width: 600px;
+
+    margin: 40px auto;
+
+    padding: 20px;
+
+}
+
+
+/* Meal LIST */
+
+.meal-preview {
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background-color: var(--dark-blue);
+    display: inline-block;
+    inline-size: 300px;
+    border-radius: 25px;
+    padding:10px 16px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #fafafa;
+
+}
+
+.mealsConsumed-norm {
+    padding:2px 2px !important;
+    margin: 0px 0;
+    //border: 1px solid #fafafa;
+    background-color: #5CDB95;
+
+}
+
+.mealsConsumed-norm:first-of-type {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}.mealsConsumed-norm:last-of-type {
+     border-bottom-left-radius: 10px;
+     border-bottom-right-radius: 10px;
+ }
+
+.mealsConsumed-preview:hover{
+    padding:2px 2px;
+    margin: 0px 0;
+    background-color: #439f6d;
+
+}
+
+.mealsConsumed-norm p{
+    color: #333333 !important;
+
+}
+
+.meal-preview:hover{
+    box-shadow: 1px 3px 5px rgba(0,0,0,0.1) !important;
+}
+.mealsConsumed-preview:hover{
+    box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
+}
+.meal-preview h2 {
+    font-size: 20px;
+    color: green;
+    margin-bottom: 8px;
+}
+
+.meal-preview h3 {
+    font-size: 20px;
+    color: greenyellow;
+    margin-bottom: 8px;
+}
+.meal-preview a{
+    text-decoration: none;
+}
+.meal-preview p{
+    color: #f2f2f2;
+}
+
+
+.meal-details div{
+    margin: 20px 0;
+}
+
+.meal-details button{
+    background: #c30de5;
+    color: #f2f2f2;
+    border: 0;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* NAVBAR */
+.navbar {
+
+    padding: 20px;
+
+    display: flex;
+
+    align-items: center;
+
+    max-width: 600px;
+
+    margin: 0 auto;
+
+    border-bottom: 1px solid #f2f2f2;
+
+}
+
+.navbar h1 {
+
+    color: #be09ec;
+
+}
+
+.navbar .links {
+
+    margin-left: auto;
+
+}
+
+.navbar a {
+
+    margin-left: 16px;
+
+    text-decoration: none;
+
+    padding: 6px;
+
+}
+
+.navbar a:hover {
+
+    color: #c30de5;
+
 }

@@ -1,0 +1,73 @@
+{
+  "meals": [
+    {
+      "id": 1,
+      "userId": "something",
+      "date": "2021 - 03 - 26",
+      "totalCalCount": 330,
+      "totalFatCount": 3,
+      "totalSodiumCount": 245,
+      "totalCarbCount": 80,
+      "totalProteinCount": 1,
+      "Meals": [
+          {
+          "name": "Coca-Cola",
+          "calories": 200,
+          "servingSize": "1 Bottle",
+          "totalFat": 0,
+          "sodium": 65,
+          "totalCarbs": 55,
+          "protein": 0,
+          "amountEaten": 1
+        },
+        {
+          "name": "Cinnamon Toast Crunch",
+          "calories": 330,
+          "servingSize": "3/4 Cup",
+          "totalFat": 3,
+          "sodium": 180,
+          "totalCarbs": 25,
+          "protein": 1,
+          "amountEaten": 2
+        }
+
+
+      ]
+    },
+    {
+      "id": 1,
+      "userId": "something",
+      "date": "2021 - 03 - 27",
+      "totalCalCount": 330,
+      "totalFatCount": 3,
+      "totalSodiumCount": 245,
+      "totalCarbCount": 80,
+      "totalProteinCount": 1,
+      "Meals": [
+        {
+          "name": "Coca-Cola",
+          "calories": 200,
+          "servingSize": "1 Bottle",
+          "totalFat": 0,
+          "sodium": 65,
+          "totalCarbs": 55,
+          "protein": 0,
+          "amountEaten": 1
+        },
+        {
+          "name": "Cinnamon Toast Crunch",
+          "calories": 330,
+          "servingSize": "3/4 Cup",
+          "totalFat": 3,
+          "sodium": 180,
+          "totalCarbs": 25,
+          "protein": 1,
+          "amountEaten": 2
+        }
+
+
+      ]
+    }
+
+  ]
+}
