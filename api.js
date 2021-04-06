@@ -947,6 +947,243 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
     });
 	
+	app.post('/api/viewmeal', async (req, res, next) =>
+    {
+        var error = '';
+        var id = -1;
+        var Name = "";
+        var ServingSize = "";
+        var Cal = 0;
+        var Fat = 0;
+        var Sodium = 0;
+        var Carbs = 0;
+        var Protein = 0;        
+        
+        // In: mealId and jwtToken
+        // Out: id, Name, ServingSize, Fat, Sodium, Carbs, Calories, Protein, token, error
+        const { mealId, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const results = await db.collection('Meals').find({"_id":ObjectId(mealId)}).toArray();   
+        if( results.length > 0 )  
+        {    
+            id = results[0]._id;
+            Name = results[0].Name;
+            ServingSize = results[0].ServingSize;
+            Cal = results[0].Calories;
+            Fat = results[0].Fat;
+            Sodium = results[0].Sodium;
+            Carbs = results[0].TotalCarbs;
+            Protein = results[0].Protein;
+        }
+
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { id:id, Name:Name, ServingSize:ServingSize, Calories:Cal, Fat:Fat, Sodium:Sodium, Carbs:Carbs, Protein:Protein, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
+
+    app.post('/api/editmeal', async (req, res, next) =>
+    {  
+        // incoming: UserId, mealId, all the meal info, jwtToken
+        // outgoing: error, token  
+        
+		var error = '';
+        var id = -1;
+        
+        const { UserId, mealId, name, calories, servingSize, totalFat, sodium, totalCarbs, protein, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const find = await db.collection('Meals').find({"_id":ObjectId(mealId)}).toArray();   
+        if( find.length <= 0 )  
+        {    
+            error = "Meal does not exist";
+            refreshedToken1 = jwt.refresh(jwtToken);
+            var ret1 = { error:error, token:refreshedToken1 };  
+            res.status(200).json(ret1);
+            return;
+        }
+		
+        //const newmeal = {UserId:userId, Name:name, Calories:calories, ServingSize:servingSize, TotalFat:totalFat, Sodium:sodium, TotalCarbs:totalCarbs, Protein:protein};
+
+		var query = { _id: ObjectId(mealId) };
+		var newvalues = { $set: {Name:name, Calories:calories, ServingSize:servingSize, TotalFat:totalFat, Sodium:sodium, TotalCarbs:totalCarbs, Protein:protein} };
+		
+		const result = await db.collection('Meals').updateOne(query, newvalues);
+		
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { error:error, token:refreshedToken };  
+        res.status(200).json(ret);
+    });
+
+    app.post('/api/editamountconsumed', async (req, res, next) =>
+    {  
+        // incoming: mealtimeId, mealId, newAmount (new amountConsumed value), jwtToken
+        // outgoing: error, token 
+        
+		var error = '';
+        var id = -1;
+        var totalCal = 0;
+        var totalFat = 0;
+        var totalSodium = 0;
+        var totalCarbs = 0;
+        var totalProtein = 0;
+        var index = -1;
+        var oldamount = 0;
+        var meals = [];
+        var meals1 = [];
+        
+        const { mealtimeId, mealId, newAmount, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const find = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        if( find.length <= 0 )  
+        {    
+            error = "Mealtime does not exist";
+            refreshedToken1 = jwt.refresh(jwtToken);
+            var ret1 = { error:error, token:refreshedToken1 };  
+            res.status(200).json(ret1);
+            return;
+        }
+
+        var totalCal = find[0].totalCalCount;
+        var totalFat = find[0].totalFatCount;
+        var totalSodium = find[0].totalSodiumCount;
+        var totalCarbs = find[0].totalCarbCount;
+        var totalProtein = find[0].totalProteinCount;
+
+        for (let i = 0; i < find[0].Meals.length; i++)
+        {
+            if (find[0].Meals[i].mealId === mealId)
+            {
+                oldamount = find[0].Meals[i].amountConsumed;
+                index = i;
+            }
+        }
+
+        const find2 = await db.collection('Meals').find({"_id":ObjectId(mealId)}).toArray();
+		
+        if (find2[0].Calories > 0)
+		{
+			totalCal -= (find2[0].Calories * oldamount);
+            totalCal += (find2[0].Calories * newAmount);
+		}
+		if (find2[0].TotalFat)
+		{
+			totalFat -= (find2[0].TotalFat * oldamount);
+            totalFat += (find2[0].TotalFat * newAmount);
+		}
+		if (find2[0].Sodium > 0)
+		{
+			totalSodium -= (find2[0].Sodium * oldamount);
+            totalSodium += (find2[0].Sodium * newAmount);
+		}
+		if (find2[0].TotalCarbs > 0)
+		{
+			totalCarbs -= (find2[0].TotalCarbs * oldamount);
+            totalCarbs += (find2[0].TotalCarbs * newAmount);
+		}
+		if (find2[0].Protein > 0)
+		{
+			totalProtein -= (find2[0].Protein * oldamount);
+            totalProtein += (find2[0].Protein * newAmount);
+		}
+
+		var query = { _id: ObjectId(mealtimeId) };
+		var newvalues = { $set: {totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein} };
+		
+		const result = await db.collection('Mealtime').updateOne(query, newvalues);
+
+        var query1 = { _id: ObjectId(mealtimeId), "Meals.mealId":mealId};
+        var newvals = { $set: {"Meals.$.amountConsumed":newAmount}};
+        
+        const result1 = await db.collection('Mealtime').updateOne(query1, newvals);
+
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { error:error, token:refreshedToken };  
+        res.status(200).json(ret);
+    });
+
+    app.post('/api/searchmealname', async (req, res, next) => 
+    {  
+        // incoming: userId, search (food name), jwtToken
+        // outgoing: results[], error, token  
+        var error = '';  
+        const { userId, search, jwtToken } = req.body; 
+        
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        var _search = search.trim(); 
+        const db = client.db();  
+        const results = await db.collection('Meals').find({"Name":{$regex:_search+'.*', $options:'r'}, "UserId":userId}).toArray();
+
+        var _ret = [];
+
+        for( var i=0; i<results.length; i++ )  
+        {    
+            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
+        }
+
+        refreshedToken = jwt.refresh(jwtToken).accessToken;
+        var ret = {results:_ret, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
+
+    app.post('/api/searchmealuser', async (req, res, next) => 
+    {  
+        // incoming: userId, jwtToken
+        // outgoing: results[], error  
+        var error = '';  
+        const { userId, jwtToken } = req.body; 
+        
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();  
+        const results = await db.collection('Meals').find({"UserId":userId}).toArray();
+
+        var _ret = [];
+
+        for( var i=0; i<results.length; i++ )  
+        {    
+            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
+        }
+
+        refreshedToken = jwt.refresh(jwtToken).accessToken;
+        var ret = {results:_ret, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
 	
 	app.post('/api/emailpasswordreset', async (req, res, next) =>
     {
