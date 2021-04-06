@@ -560,7 +560,7 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
     });
 
-    app.post('/api/addmealtimenew', async (req, res, next) =>
+    app.post('/api/addmealtime', async (req, res, next) =>
     {  
         // incoming: userId, info (array of json objects, containing a mealId and amountConsumed), jwtToken
         // outgoing: error  
@@ -668,7 +668,7 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
     });
 
-    app.post('/api/viewmealtimenew', async (req, res, next) =>
+    app.post('/api/viewmealtime', async (req, res, next) =>
     {
         var error = '';
         var id = -1;
@@ -719,7 +719,7 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
     });
 
-    app.post('/api/searchmealtimenew', async (req, res, next) => 
+    app.post('/api/searchmealtime', async (req, res, next) => 
     {  
         // incoming: userId, range (of results wanted [7/30/365 etc]), jwtToken
         // outgoing: results[], error  
@@ -748,7 +748,7 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
     });
 
-    app.post('/api/addmealsnew', async (req, res, next) =>
+    app.post('/api/addmeals', async (req, res, next) =>
     {  
         // incoming: mealtimeId, info (array of json objects), jwtToken
         // outgoing: error  
