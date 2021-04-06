@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 
 //given the necessary data to display (called externally)
-const MealList = ({meals: meals, title}) => {
+const DailyMealList = ({meals: meals, title}) => {
 
 
     return(
@@ -34,4 +34,4 @@ const MealList = ({meals: meals, title}) => {
     );
 }
 
-export default MealList;
+export default DailyMealList;
