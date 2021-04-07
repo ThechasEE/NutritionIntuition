@@ -4,8 +4,7 @@ const {ObjectId} = require('mongodb');
 const jwt = require('./createJWT');
 
 const sgMail = require('@sendgrid/mail');
-var SENDGRID_API_KEY = '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';
-sgMail.setApiKey(SENDGRID_API_KEY);
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 exports.setApp = function (app, client)
 {
