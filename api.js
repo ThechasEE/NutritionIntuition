@@ -572,9 +572,6 @@ app.post('/api/register', async (req, res, next) =>
         {
             meals.push(ObjectId(info[i].mealId))
         }
-
-        meals2 = [ObjectId("606b99f4d8544d1e212211f0"), ObjectId("606b9ee7d8544d1e212211f1")]
-
         
         if( jwt.isExpired(jwtToken))
         {
@@ -856,7 +853,7 @@ app.post('/api/register', async (req, res, next) =>
 
     app.post('/api/removemealtimemeal', async (req, res, next) =>
     {  
-        // incoming: mealtimeId, index (index of item to delete in meals array), jwtToken
+        // incoming: mealtimeId, mealId, jwtToken
         // outgoing: error  
         
 		var error = '';
@@ -996,7 +993,7 @@ app.post('/api/register', async (req, res, next) =>
 		var error = '';
         var id = -1;
         
-        const { UserId, mealId, name, calories, servingSize, totalFat, sodium, totalCarbs, protein, jwtToken } = req.body;
+        const { userId, mealId, name, calories, servingSize, totalFat, sodium, totalCarbs, protein, jwtToken } = req.body;
         
         if( jwt.isExpired(jwtToken))
         {
@@ -1005,13 +1002,29 @@ app.post('/api/register', async (req, res, next) =>
             return;
         }
 
-        const db = client.db();  
+        const db = client.db();
+        const find1 = await db.collection('Meals').find({"UserId":userId, "Name":name}).toArray();
+        if (find1.length > 0)
+        {
+            if (find1[0]._id != mealId)
+            {
+                error = "Meal with this name already exists, choose another."
+                id = -1;
+                refreshedToken2 = jwt.refresh(jwtToken);
+                var ret2 = { id:id, error:error, token:refreshedToken2 }; 
+                res.status(200).json(ret2);
+                return;
+            }
+            
+        }  
+	    
         const find = await db.collection('Meals').find({"_id":ObjectId(mealId)}).toArray();   
         if( find.length <= 0 )  
         {    
             error = "Meal does not exist";
+		id = -1;
             refreshedToken1 = jwt.refresh(jwtToken);
-            var ret1 = { error:error, token:refreshedToken1 };  
+            var ret1 = { id:id, error:error, token:refreshedToken1 };    
             res.status(200).json(ret1);
             return;
         }
@@ -1024,7 +1037,7 @@ app.post('/api/register', async (req, res, next) =>
 		const result = await db.collection('Meals').updateOne(query, newvalues);
 		
         refreshedToken = jwt.refresh(jwtToken);
-        var ret = { error:error, token:refreshedToken };  
+        var ret = { id:id, error:error, token:refreshedToken };  
         res.status(200).json(ret);
     });
 
