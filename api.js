@@ -1037,6 +1037,7 @@ app.post('/api/register', async (req, res, next) =>
 		const result = await db.collection('Meals').updateOne(query, newvalues);
 		
         refreshedToken = jwt.refresh(jwtToken);
+	    id = 1;
         var ret = { id:id, error:error, token:refreshedToken };  
         res.status(200).json(ret);
     });
