@@ -534,7 +534,7 @@ app.post('/api/register', async (req, res, next) =>
         var error = '';  
 
         const db = client.db();
-        const check = await db.collection('Meals').find({"Name":name, "UserId":userId}).toArray();
+        const check = await db.collection('Food').find({"Name":name, "UserId":userId}).toArray();
         
         if (check.length > 0)
         {
@@ -545,7 +545,7 @@ app.post('/api/register', async (req, res, next) =>
         {
             try  
             {               
-                const result = await db.collection('Meals').insertOne(newmeal);
+                const result = await db.collection('Food').insertOne(newmeal);
                 id = result.insertedId;
             }  
             catch(e)  
@@ -588,7 +588,7 @@ app.post('/api/register', async (req, res, next) =>
         var totalProtein = 0;
 
         const db = client.db();
-        const ress = await db.collection('Meals').find({"UserId":userId, "_id": {$in : meals}}).toArray();
+        const ress = await db.collection('Food').find({"UserId":userId, "_id": {$in : meals}}).toArray();
         var info1 = info;
         
         for (let index = 0; index < ress.length; index++) 
@@ -622,7 +622,7 @@ app.post('/api/register', async (req, res, next) =>
         const newmealtime = {UserId:userId, Date: new Date(dat), totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:info1};  
         var error = '';
 
-        const check = await db.collection('Mealtime').find({"UserId":userId}).sort({$natural:-1}).limit(1).toArray();
+        const check = await db.collection('Meals').find({"UserId":userId}).sort({$natural:-1}).limit(1).toArray();
         
         if (check.length > 0)
         {
@@ -637,7 +637,7 @@ app.post('/api/register', async (req, res, next) =>
             {
                 try  
                 {               
-                    const result = await db.collection('Mealtime').insertOne(newmealtime);
+                    const result = await db.collection('Meals').insertOne(newmealtime);
                     id = result.insertedId;
                 }  
                 catch(e)  
@@ -650,7 +650,7 @@ app.post('/api/register', async (req, res, next) =>
         {
             try  
             {               
-                const result = await db.collection('Mealtime').insertOne(newmealtime);
+                const result = await db.collection('Meals').insertOne(newmealtime);
                 id = result.insertedId;
             }  
             catch(e)
@@ -687,7 +687,7 @@ app.post('/api/register', async (req, res, next) =>
         }
 
         const db = client.db();  
-        const results = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        const results = await db.collection('Meals').find({"_id":ObjectId(mealtimeId)}).toArray();   
         if( results.length > 0 )  
         {    
             id = results[0]._id;    
@@ -704,7 +704,7 @@ app.post('/api/register', async (req, res, next) =>
             meals1.push(ObjectId(meals[i].mealId));
         }
         
-        const ress = await db.collection('Meals').find({"_id": {$in : meals1}}).toArray();
+        const ress = await db.collection('Food').find({"_id": {$in : meals1}}).toArray();
         for (let i = 0; i < ress.length; i++)
         {
             ress[i].amountConsumed = meals[i].amountConsumed;
@@ -732,7 +732,7 @@ app.post('/api/register', async (req, res, next) =>
 
         const db = client.db();
         var dat2 = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
-        const results = await db.collection('Mealtime').find({"Date":{$gt: dat2}, "UserId":userId}).toArray();
+        const results = await db.collection('Meals').find({"Date":{$gt: dat2}, "UserId":userId}).toArray();
         var _ret = [];
 
         for( var i=0; i<results.length; i++ )  
@@ -777,7 +777,7 @@ app.post('/api/register', async (req, res, next) =>
         }
 
         const db = client.db();  
-        const find = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        const find = await db.collection('Meals').find({"_id":ObjectId(mealtimeId)}).toArray();   
         
         if( find.length > 0 ) 
         {    
@@ -810,7 +810,7 @@ app.post('/api/register', async (req, res, next) =>
             }
         } 
 
-        const ress = await db.collection('Meals').find({"_id": {$in : meals}}).toArray();
+        const ress = await db.collection('Food').find({"_id": {$in : meals}}).toArray();
         var info1 = info;
         
         for (let index = 0; index < ress.length; index++) 
@@ -844,7 +844,7 @@ app.post('/api/register', async (req, res, next) =>
 		var query = { _id: id };
 		var newvalues = { $set: {totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:newMeals} };
 		
-		const result = await db.collection('Mealtime').updateOne(query, newvalues);
+		const result = await db.collection('Meals').updateOne(query, newvalues);
 		
         refreshedToken = jwt.refresh(jwtToken);
         var ret = { error:error, token:refreshedToken };  
@@ -877,7 +877,7 @@ app.post('/api/register', async (req, res, next) =>
         }
 
         const db = client.db();  
-        const find = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        const find = await db.collection('Meals').find({"_id":ObjectId(mealtimeId)}).toArray();   
         if( find.length > 0 )  
         {    
             id = find[0]._id;    
@@ -908,7 +908,7 @@ app.post('/api/register', async (req, res, next) =>
             return;
         }
 
-        const ress = await db.collection('Meals').find({"_id": {$in : meals1}}).toArray();
+        const ress = await db.collection('Food').find({"_id": {$in : meals1}}).toArray();
 		
 		if (ress[index].Calories > 0)
 		{
@@ -936,7 +936,7 @@ app.post('/api/register', async (req, res, next) =>
 		var query = { _id: id };
 		var newvalues = { $set: {totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:meals} };
 		
-		const result = await db.collection('Mealtime').updateOne(query, newvalues);
+		const result = await db.collection('Meals').updateOne(query, newvalues);
 		
         refreshedToken = jwt.refresh(jwtToken);
         var ret = { error:error, token:refreshedToken };  
@@ -967,7 +967,7 @@ app.post('/api/register', async (req, res, next) =>
         }
 
         const db = client.db();  
-        const results = await db.collection('Meals').find({"_id":ObjectId(mealId)}).toArray();   
+        const results = await db.collection('Food').find({"_id":ObjectId(mealId)}).toArray();   
         if( results.length > 0 )  
         {    
             id = results[0]._id;
@@ -1003,7 +1003,7 @@ app.post('/api/register', async (req, res, next) =>
         }
 
         const db = client.db();
-        const find1 = await db.collection('Meals').find({"UserId":userId, "Name":name}).toArray();
+        const find1 = await db.collection('Food').find({"UserId":userId, "Name":name}).toArray();
         if (find1.length > 0)
         {
             if (find1[0]._id != mealId)
@@ -1018,7 +1018,7 @@ app.post('/api/register', async (req, res, next) =>
             
         }  
 	    
-        const find = await db.collection('Meals').find({"_id":ObjectId(mealId)}).toArray();   
+        const find = await db.collection('Food').find({"_id":ObjectId(mealId)}).toArray();   
         if( find.length <= 0 )  
         {    
             error = "Meal does not exist";
@@ -1034,7 +1034,7 @@ app.post('/api/register', async (req, res, next) =>
 		var query = { _id: ObjectId(mealId) };
 		var newvalues = { $set: {Name:name, Calories:calories, ServingSize:servingSize, TotalFat:totalFat, Sodium:sodium, TotalCarbs:totalCarbs, Protein:protein} };
 		
-		const result = await db.collection('Meals').updateOne(query, newvalues);
+		const result = await db.collection('Food').updateOne(query, newvalues);
 		
         refreshedToken = jwt.refresh(jwtToken);
 	    id = 1;
@@ -1069,7 +1069,7 @@ app.post('/api/register', async (req, res, next) =>
         }
 
         const db = client.db();  
-        const find = await db.collection('Mealtime').find({"_id":ObjectId(mealtimeId)}).toArray();   
+        const find = await db.collection('Meals').find({"_id":ObjectId(mealtimeId)}).toArray();   
         if( find.length <= 0 )  
         {    
             error = "Mealtime does not exist";
@@ -1094,7 +1094,7 @@ app.post('/api/register', async (req, res, next) =>
             }
         }
 
-        const find2 = await db.collection('Meals').find({"_id":ObjectId(mealId)}).toArray();
+        const find2 = await db.collection('Food').find({"_id":ObjectId(mealId)}).toArray();
 		
         if (find2[0].Calories > 0)
 		{
@@ -1125,12 +1125,12 @@ app.post('/api/register', async (req, res, next) =>
 		var query = { _id: ObjectId(mealtimeId) };
 		var newvalues = { $set: {totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein} };
 		
-		const result = await db.collection('Mealtime').updateOne(query, newvalues);
+		const result = await db.collection('Meals').updateOne(query, newvalues);
 
         var query1 = { _id: ObjectId(mealtimeId), "Meals.mealId":mealId};
         var newvals = { $set: {"Meals.$.amountConsumed":newAmount}};
         
-        const result1 = await db.collection('Mealtime').updateOne(query1, newvals);
+        const result1 = await db.collection('Meals').updateOne(query1, newvals);
 
         refreshedToken = jwt.refresh(jwtToken);
         var ret = { error:error, token:refreshedToken };  
@@ -1154,7 +1154,7 @@ app.post('/api/register', async (req, res, next) =>
 
         var _search = search.trim(); 
         const db = client.db();  
-        const results = await db.collection('Meals').find({"Name":{$regex:_search+'.*', $options:'r'}, "UserId":userId}).toArray();
+        const results = await db.collection('Food').find({"Name":{$regex:_search+'.*', $options:'r'}, "UserId":userId}).toArray();
 
         var _ret = [];
 
@@ -1184,7 +1184,7 @@ app.post('/api/register', async (req, res, next) =>
         }
 
         const db = client.db();  
-        const results = await db.collection('Meals').find({"UserId":userId}).toArray();
+        const results = await db.collection('Food').find({"UserId":userId}).toArray();
 
         var _ret = [];
 
