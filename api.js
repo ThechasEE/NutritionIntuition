@@ -2,6 +2,7 @@ require('express');
 require('mongodb');
 const {ObjectId} = require('mongodb');
 const jwt = require('./createJWT');
+const jwt2 = require('jsonwebtoken');
 
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -30,13 +31,15 @@ app.post('/api/register', async (req, res, next) =>
             const result = await db.collection('Users').insertOne({Login:login, Email:email, Password:password, FirstName:firstName, LastName:lastName, CalorieGoal:calorieGoal, Age:age, Weight:weight, GoalWeight:goalWeight, Height:height, Gender:gender, IsVerified:isVerified});
             id = result.insertedId;
 			
+			const verifyToken = jwt2.sign({id}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
+			
 			const msg = {
 				to: email, // Change to your recipient
 				from: 'noreply.nutritionintuition@gmail.com', // Change to your verified sender
 				templateId: 'd-7ad16c4f998f4ffa8a4e407922a10f82',
 
 				dynamic_template_data: {
-					verify: 'https://nutrition-intuition.herokuapp.com/',
+					verify: 'https://nutrition-intuition.herokuapp.com/api/verify?verifyToken=' + verifyToken,
 				},
 			};
 
@@ -1198,20 +1201,32 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
     });
 	
-	app.post('/api/emailpasswordreset', async (req, res, next) =>
+	app.post('/api/resetpassword', async (req, res, next) =>
     {
-        // Incoming: email 
+        // Incoming: login, newPassword 
         // Outgoing: error
         var error = '';
-        const { email } = req.body;
-			
+		var id = -1;
+		var email = '';
+        const { login, newPassword } = req.body;
+		
+		const db = client.db();  
+        const find = await db.collection('Users').find({"Login":login}).toArray();   
+        if( find.length > 0 )  
+        {    
+            id = find[0]._id;    
+			email = find[0].Email;
+        }
+		
+		const resetToken = jwt2.sign({id, newPassword}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
+		
 		const msg = {
 			to: email, // Change to your recipient
 			from: 'noreply.nutritionintuition@gmail.com', // Change to your verified sender
 			templateId: 'd-290d6278dd4949fe8f7aed021177cf4d',
 
 			dynamic_template_data: {
-				verify: 'https://nutrition-intuition.herokuapp.com/',
+				reset: 'https://nutrition-intuition.herokuapp.com/api/reset?resetToken=' + resetToken,
 			},
 		};
 
@@ -1229,13 +1244,58 @@ app.post('/api/register', async (req, res, next) =>
 
     });
 	
-	app.post('/api/verify', async (req, res, next) =>
+	app.get('/api/reset', async (req, res, next) =>
     {
-        // Incoming: userId
+        // Incoming: jwtToken
+        // Outgoing: error
+        var error = '';
+		var userId = -1;
+		var newPassword = '';
+		var decode = '';
+		const {resetToken} = req.query;
+		
+		jwt2.verify(resetToken, process.env.JWT_ACC_ACTIVATE, function(err, decodedToken) {
+			if(err) {
+				return res.status(400).json({error: 'Incorrect or expired link'})
+			}
+			decode = decodedToken;
+		});
+		
+		userId = decode.id;
+		newPassword = decode.newPassword;
+		
+		const db = client.db();  
+        const results = await db.collection('Users').updateOne(
+            {"_id":ObjectId(userId)},
+            { $set: {"Password":newPassword}});
+
+        if (results.matchedCount < 1)
+        {
+            error = "Update Failed";
+        }
+		
+		res.redirect('https://nutrition-intuition.herokuapp.com/');
+
+    });
+	
+	app.get('/api/verify', async (req, res, next) =>
+    {
+        // Incoming: jwtToken
         // Outgoing: error
         var error = '';
 		var isVerified = true;
-        const { userId } = req.body;
+		var userId = -1;
+		var decode = '';
+		const {verifyToken} = req.query;
+		
+		jwt2.verify(verifyToken, process.env.JWT_ACC_ACTIVATE, function(err, decodedToken) {
+			if(err) {
+				return res.status(400).json({error: 'Incorrect or expired link'})
+			}
+			decode = decodedToken;
+		});
+		
+		userId = decode.id;
 		
 		const db = client.db();  
         const results = await db.collection('Users').updateOne(
@@ -1247,25 +1307,33 @@ app.post('/api/register', async (req, res, next) =>
             error = "Update Failed";
         }
 		
-        var ret = { error:error };
-        res.status(200).json(ret);
+		res.redirect('https://nutrition-intuition.herokuapp.com/');
 
     });
 	
-	app.post('/api/resendemail', async (req, res, next) =>
+	app.post('/api/resendverifyemail', async (req, res, next) =>
     {
-        // Incoming: login, email, password, firstName, lastName, calorieGoal, age, weight, goalWeight, height, gender 
+        // Incoming: userId, email 
         // Outgoing: error
         var error = '';
         const { email } = req.body;
-			
+		
+		const db = client.db();  
+        const find = await db.collection('Users').find({"Email":email}).toArray();   
+        if( find.length > 0 )  
+        {    
+            userId = find[0]._id;    
+        }
+		
+		const verifyToken = jwt2.sign({id}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
+		
 		const msg = {
 			to: email, // Change to your recipient
 			from: 'noreply.nutritionintuition@gmail.com', // Change to your verified sender
 			templateId: 'd-7ad16c4f998f4ffa8a4e407922a10f82',
 
 			dynamic_template_data: {
-				verify: 'https://nutrition-intuition.herokuapp.com/',
+				verify: 'https://nutrition-intuition.herokuapp.com/api/verify?verifyToken=' + verifyToken,
 			},
 		};
 
@@ -1282,4 +1350,5 @@ app.post('/api/register', async (req, res, next) =>
         res.status(200).json(ret);
 
     });
+	
 }
