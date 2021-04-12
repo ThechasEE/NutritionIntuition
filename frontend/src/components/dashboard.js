@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 const Dashboard = () =>
     {
         const {data} = useParams();
-        print(data);
+        console.log(data);
         // const storage = require("../tokenStorage.js");
         // const token = storage.retrieveToken();
         // console.log(token);
