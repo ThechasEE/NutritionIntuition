@@ -754,7 +754,7 @@ app.post('/api/register', async (req, res, next) =>
         {    
             _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "mealtimeId":results[i]._id, "Meals":results[i].Meals});  
         }
-        refreshedToken = jwt.refresh(jwtToken).accessToken;
+        refreshedToken = jwt.refresh(jwtToken);
         var ret = {results:_ret, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
@@ -1178,7 +1178,7 @@ app.post('/api/register', async (req, res, next) =>
             _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
         }
 
-        refreshedToken = jwt.refresh(jwtToken).accessToken;
+        refreshedToken = jwt.refresh(jwtToken);
         var ret = {results:_ret, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
@@ -1208,7 +1208,7 @@ app.post('/api/register', async (req, res, next) =>
             _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
         }
 
-        refreshedToken = jwt.refresh(jwtToken).accessToken;
+        refreshedToken = jwt.refresh(jwtToken);
         var ret = {results:_ret, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
