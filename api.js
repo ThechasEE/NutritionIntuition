@@ -59,48 +59,50 @@ app.post('/api/register', async (req, res, next) =>
     });
 
     app.post('/api/login', async (req, res, next) => 
-    {  
-        // incoming: login, password  
-        // outgoing: jwt access token or id of -1 to signify user doesn't exist
-        var error = '';  
-        const { login, password } = req.body;  
+{  
+    // incoming: login, password  
+    // outgoing: jwt access token or id of -1 to signify user doesn't exist and an error message saying why
+    var error = '';  
+    const { login, password } = req.body;  
 
-        const db = client.db();  
-        const results = await db.collection('Users').find({Login:login,Password:password}).toArray();
+    const db = client.db();  
+    const results = await db.collection('Users').find({Login:login,Password:password}).toArray();
 
-        var id = -1;  
-        var fn = '';  
-        var ln = '';
-        var ret;  
-        
-        if( results.length > 0 )  
-        {    
-            if(results[0].IsVerified == true) {
-				id = results[0]._id;    
-				fn = results[0].FirstName;
-				ln = results[0].LastName;
-				
-				try 
-				{
-					ret = jwt.createToken(fn, ln, id);
-				} 
-				catch (e)
-				{
-					ret = {error:e.message};
-				}
-			}
-			else {
-				error = "User is not verified."
-				ret = {error:error}
-			}
+    var id = -1;
+    var id1 = 0; 
+    var fn = '';  
+    var ln = '';
+    var ret;  
+    
+    if( results.length > 0 )  
+    {    
+        if(results[0].IsVerified == true) {
+            id1 = results[0]._id;    
+            fn = results[0].FirstName;
+            ln = results[0].LastName;
+            
+            try 
+            {
+                id = jwt.createToken(fn, ln, id1);
+            } 
+            catch (e)
+            {
+                error = e.message;
+
+            }
         }
-        else 
-        {
-            ret = {id:id}
+        else {
+            error = "User is not verified."
         }
-        //var ret = { id:id, firstName:fn, lastName:ln, error:error};  
-        res.status(200).json(ret);
-    });
+    }
+    else
+    {
+        error = "Login or Password incorrect"
+    }
+
+    var ret = {id:id, error:error}; 
+    res.status(200).json(ret);
+});
     
     app.post('/api/checkusernameemail', async (req, res, next) => 
     {  
