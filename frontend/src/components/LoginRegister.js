@@ -123,7 +123,7 @@ function LoginRegister()
                 //console.log(res);
                 storage.storeToken(responseObj);
                 setLoginMessage("");
-                window.location.href = "/cards";
+                window.location.href = "/dashboard";
             }
         }
         catch(e)

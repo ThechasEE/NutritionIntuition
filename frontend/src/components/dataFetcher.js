@@ -10,6 +10,7 @@ const DataFetcher = (url) => {
         //use this to stop the fetch if needed.
         const abortCont = new AbortController();
         setTimeout(()=> {
+            console.log(url);
             fetch(url, { signal :abortCont.signal })
                 .then(res => {
                     if(!res.ok){

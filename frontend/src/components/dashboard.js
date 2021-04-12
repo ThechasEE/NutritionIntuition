@@ -3,22 +3,31 @@ import dataFetcher from "./dataFetcher";
 import DailyMealList from "./DailyMealList";
 import {BrowserRouter as Router} from "react-router-dom";
 
-const Dashboard = () => {
-    //collect data for components
-    const { data: meals, isPending, error} = dataFetcher('http://localhost:8000/dates');
 
+const Dashboard = () =>
+    {
+        const storage = require("../tokenStorage.js");
+        const token = storage.retrieveToken();
+        console.log(token);
+        console.log(token._id);
+    const bp = require("./bp.js");
+    //collect data for components
+    //const { data: meals, isPending, error} = dataFetcher();
+    //const { data: meals, isPending, error} = dataFetcher(bp.buildPath("api/mealtime"));
+    const meals = null;
 
 
     return (
         <div className="App">
             {<Navbar></Navbar>}
-        <div className="dashboard">
-            WIP
-            { error && <div> { error } </div>}
-            { isPending && <div>Loading...</div> }
-            { meals && <DailyMealList meals={meals.filter((meal) => meal.userId === 'something' )} title="Meals Test"/>}
+            <div className="dashboard">
+                WIP
+                {/*error && <div> {error} </div>}
+                {isPending && <div>Loading...</div>*/}
+                {meals &&
+                <DailyMealList meals={meals.filter((meal) => meal.userId === 'something')} title="Meals Test"/>}
 
-        </div>
+            </div>
         </div>
     );
 }
