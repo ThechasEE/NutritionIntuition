@@ -10,25 +10,22 @@ function App()
 {
     return (
         <Router>
-        <div className="App">
-            {/*<Navbar></Navbar>*/}
-        <Router >
-            <Switch>
-                <Route path="/" exact>
-                    <LoginRegisterPage />
-                </Route>
-                <Route path="/dashboard" exact>
-                    <Dashboard />
-                </Route>
-
-                <Redirect to="/" />
-            </Switch>  
-        </Router>
-        </div>
+            <div className="App">
+                {/*<Navbar></Navbar>*/}
+                <Router >
+                    <Switch>
+                        <Route path="/" exact>
+                            <LoginRegisterPage />
+                        </Route>
+                        <Route path="/dashboard" exact>
+                            <Dashboard />
+                        </Route>
+                        <Redirect to="/" />
+                    </Switch>  
+                </Router>
+            </div>
         </Router>
     );
-
-
 }
 
 export default App;
