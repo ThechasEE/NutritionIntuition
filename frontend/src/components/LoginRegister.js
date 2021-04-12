@@ -23,6 +23,12 @@ class Variables extends React.Component
         calorieGoal: "",
         weightGoal: ""
     }
+
+    static emailVars = {
+        login: "",
+        newPassword: "",
+        newPasswordConfirm: ""
+    }
 }
 
 function LoginRegister()
@@ -30,13 +36,13 @@ function LoginRegister()
     const bp = require("./bp.js");
     const storage = require("../tokenStorage.js");
     //const bcrypt = require('bcrypt');
-    //const jwt = require("jsonwebtoken");
 
     // Event handlers.
     const [loginMessage, setLoginMessage] = useState("");
     const [registerSetupMessage, setRegisterSetupMessage] = useState("");
     const [registerPersonalMessage, setRegisterPersonalMessage] = useState("");
     const [registerGoalMessage, setRegisterGoalMessage] = useState("");
+    const [registerResetMessage, setRegisterResetMessage] = useState("");
     const [form, setForm] = useState("Login");
 
     // Toggle between login and setup forms.
@@ -48,6 +54,21 @@ function LoginRegister()
         // Toggle.
         if (form === "Login")
             setForm("RegisterSetup");
+        else
+            setForm("Login");
+        
+        return false;
+    }
+
+    // Toggle between login and forgot password forms.
+    const toggleFormPasswordSetup = async event =>
+    {
+        event.stopPropagation();
+        event.preventDefault();
+
+        // Toggle.
+        if (form === "Login")
+            setForm("ForgotPassword");
         else
             setForm("Login");
         
@@ -112,17 +133,19 @@ function LoginRegister()
             const response = await fetch(bp.buildPath("api/login"), {method:"POST", body:json,headers:{"Content-Type": "application/json"}});
             var responseObj = JSON.parse(await response.text());
             
+            if (responseObj.error !== "")
+            {
+                setLoginMessage(responseObj.error)
+                return false;
+            }
+
             if (responseObj.id <= 0)
             {                
                 setLoginMessage("User/Password combination incorrect");
             }
             else
             {
-                //var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
-                //localStorage.setItem('user_data', JSON.stringify(user));
-                //console.log(res);
-                storage.storeToken(responseObj);
-                setLoginMessage("");
+                storage.storeToken(responseObj.id);
                 window.location.href = "/dashboard";
             }
         }
@@ -137,7 +160,59 @@ function LoginRegister()
     // Handle when a user has forgotten their password.
     const forgotPassword = async event =>
     {
+        event.stopPropagation();
+        event.preventDefault();
+        setRegisterResetMessage('');
 
+        // Check for any empty entries.
+        if (Variables.emailVars.login.value.trim() === "")
+        {
+            setRegisterResetMessage("Please enter your Username");
+            return false;
+        }
+        else if (Variables.emailVars.newPassword.value.trim() === "")
+        {
+            setRegisterResetMessage("Please enter your New Password");
+            return false;
+        }
+        else if (Variables.emailVars.newPasswordConfirm.value.trim() === "")
+        {
+            setRegisterResetMessage("Please confirm your New Password");
+            return false;
+        }
+        else if (Variables.emailVars.newPassword.value !== Variables.emailVars.newPasswordConfirm.value)
+        {
+            setRegisterResetMessage("Passwords do not match");
+            return false;
+        }
+
+        // Registration object to send.
+        var obj = {
+            login: Variables.emailVars.login.value,
+            newPassword: Variables.emailVars.newPassword.value,
+        };
+        var json = JSON.stringify(obj);
+
+        try
+        {
+            const response = await fetch(bp.buildPath("api/resetpassword"), {method:"POST", body:json, headers:{"Content-Type": "application/json"}});
+            var responseObj = JSON.parse(await response.text());
+
+            if (responseObj.error !== "")
+            {
+                setRegisterResetMessage(responseObj.error);
+            }
+            else
+            {
+                setRegisterResetMessage("An email will be sent to the associated username if it exists");
+            }
+        }
+        catch(e)
+        {
+            setRegisterResetMessage(e.toString());
+        }
+
+        return false;
     }
 
     // Handle setup information phase of registration.
@@ -290,7 +365,7 @@ function LoginRegister()
 
             if (responseObj.id <= 0)
             {
-                setRegisterGoalMessage("User already exists");
+                setRegisterGoalMessage(responseObj.error);
                 return false;
             }
 
@@ -312,7 +387,7 @@ function LoginRegister()
             <input className="input" type="text" placeholder="Username" ref={(c) => (c !== null) ? Variables.loginVars.username = c : null} defaultValue={Variables.loginVars.username === null ? "" : Variables.loginVars.username.value}/>
             <input className="input" type="password" placeholder="Password" ref={(c) => (c !== null) ? Variables.loginVars.password = c : null} defaultValue={Variables.loginVars.password === null ? "" : Variables.loginVars.password.value}/>
             <button className="login-register-submit" type="submit" onClick={doLogin}>Log In</button>
-            <div><a className="link" href="/#" onClick={forgotPassword}>Forgot Password?</a></div>
+            <div><a className="link" href="/#" onClick={toggleFormPasswordSetup}>Forgot Password?</a></div>
             <div className="form-error-text spacing">{loginMessage}</div>
             <div className="form-text">Don't have an account? Register below and look forward to a healthier future!</div>
             <button className="login-register-button-big" type="submit" onClick={toggleFormLoginSetup}>Register</button>
@@ -383,13 +458,28 @@ function LoginRegister()
         </form>
     )
 
+    const ForgotPassword = () =>
+    (
+        <form className="login-register-form">
+            <img className="image" src={logo} alt="Not found"/>
+            <div className="register-header">Password Reset</div>
+            <input className="input" type="text" placeholder="Account Username" ref={(c) => (c !== null) ? Variables.emailVars.login = c : null} defaultValue={Variables.emailVars.login === null ? "" : Variables.emailVars.login.value}/>
+            <input className="input" type="password" placeholder="New Password" ref={(c) => (c !== null) ? Variables.emailVars.newPassword = c : null} defaultValue={Variables.emailVars.newPassword === null ? "" : Variables.emailVars.newPassword.value}/>
+            <input className="input" type="password" placeholder="Confirm New Password" ref={(c) => (c !== null) ? Variables.emailVars.newPasswordConfirm = c : null} defaultValue={Variables.emailVars.newPasswordConfirm === null ? "" : Variables.emailVars.newPasswordConfirm.value}/>
+            <div className="form-error-text">{registerResetMessage}</div>
+            <button className="login-register-submit" type="submit" onClick={forgotPassword}>Send Reset Password Email</button>
+            <button className="login-register-submit register-back" type="submit" onClick={toggleFormPasswordSetup}>Back to login</button>
+        </form>
+    )
+
     return (
         <div>
             { (form === "Login") ? <Login /> :
                 (form === "RegisterSetup") ? <RegisterSetup /> :
                     (form === "RegisterPersonal") ? <RegisterPersonal /> :
                         (form === "RegisterGoal") ? <RegisterGoal /> :
-                            <EmailConfirmation />
+                            (form === "EmailConfirmation") ? <EmailConfirmation /> :
+                                <ForgotPassword />
             }
         </div>
     )
