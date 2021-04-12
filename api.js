@@ -90,6 +90,30 @@ app.post('/api/register', async (req, res, next) =>
 				}
 			}
 			else {
+				userId = results[0]._id;
+				email = results[0].Email;
+				
+				const verifyToken = jwt2.sign({userId}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
+				
+				const msg = {
+					to: email, // Change to your recipient
+					from: 'noreply.nutritionintuition@gmail.com', // Change to your verified sender
+					templateId: 'd-7ad16c4f998f4ffa8a4e407922a10f82',
+
+					dynamic_template_data: {
+						verify: 'https://nutrition-intuition.herokuapp.com/api/verify?verifyToken=' + verifyToken,
+					},
+				};
+
+				sgMail
+					.send(msg)
+					.then(() => {
+						console.log('Email sent')
+					})
+					.catch((error) => {
+						console.error(error)
+					});
+				
 				error = "User is not verified."
 				ret = {error:error}
 			}
@@ -641,7 +665,7 @@ app.post('/api/register', async (req, res, next) =>
             userId = find[0]._id;    
         }
 		
-		const verifyToken = jwt2.sign({id}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
+		const verifyToken = jwt2.sign({userId}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
 		
 		const msg = {
 			to: email, // Change to your recipient
