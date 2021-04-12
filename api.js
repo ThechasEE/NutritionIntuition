@@ -133,47 +133,57 @@ app.post('/api/register', async (req, res, next) =>
     });
     
     app.post('/api/viewprofile', async (req, res, next) =>
+{
+    // incoming: userId and jwtToken
+    // outgoing: id, firstName, lastName, age, weight, goalWeight, calorieGoal, height, gender, refreshedToken, error
+
+    var error = '';
+    var id = -1;
+    var firstName = '';
+    var lastName = '';
+    var age = '';
+    var weight = '';
+    var goalWeight = '';
+    var calorieGoal = '';
+    var height = '';
+    var gender = '';
+
+    const { userId, jwtToken } = req.body;
+    
+    if( jwt.isExpired(jwtToken))
     {
-        // incoming: userId and jwtToken
-        // outgoing: firstName, lastName, age, weight, goalWeight, calorieGoal, height, gender, refreshedToken, error
+        var r = {error:'The JWT is no longer valid'};
+        res.status(200).json(r);
+        return;
+    }
 
-        var error = '';
-        var id = -1;
-        var firstName = '';
-        var lastName = '';
-        var age = '';
-        var weight = '';
-        var goalWeight = '';
-        var calorieGoal = '';
-        var height = '';
-        var gender = '';
-
-        const { userId, jwtToken } = req.body;
-        
-        if( jwt.isExpired(jwtToken))
-        {
-            var r = {error:'The JWT is no longer valid'};
-            res.status(200).json(r);
-            return;
-        }
-
-        const db = client.db();  
-        const results = await db.collection('Users').find({"_id":ObjectId(userId)}).toArray();   
-        if( results.length > 0 )  
-        {   
-            firstName = results[0].FirstName;
-            lastName = results[0].LastName;
-            age = results[0].Age;
-            weight = results[0].Weight;
-            goalWeight = results[0].GoalWeight;
-            calorieGoal = results[0].CalorieGoal;
-            height = results[0].Height;
-            gender = results[0].Gender;
-        }
-        refreshedToken = jwt.refresh(jwtToken);
-        var ret = { firstName:firstName, lastName:lastName, age:age, weight:weight, goalWeight:goalWeight, calorieGoal:calorieGoal, height:height, gender:gender, token:refreshedToken, error:error};  
-        res.status(200).json(ret);
-    });
+    const db = client.db();  
+    const results = await db.collection('Users').find({"_id":ObjectId(userId)}).toArray();   
+    if( results.length > 0 )  
+    {   
+        id = 1;
+        firstName = results[0].FirstName;
+        lastName = results[0].LastName;
+        age = results[0].Age;
+        weight = results[0].Weight;
+        goalWeight = results[0].GoalWeight;
+        calorieGoal = results[0].CalorieGoal;
+        height = results[0].Height;
+        gender = results[0].Gender;
+    }
+    else
+    {
+        id = -1;
+        error = "User doesn't exist"
+        var refreshedToken1 = jwt.refresh(jwtToken);
+        var ret2 = {id:id, token:refreshedToken1, error:error};
+        res.status(200).json(ret2);
+        return;
+    }
+    var refreshedToken = jwt.refresh(jwtToken);
+    var ret = { id:id, firstName:firstName, lastName:lastName, age:age, weight:weight, goalWeight:goalWeight, calorieGoal:calorieGoal, height:height, gender:gender, token:refreshedToken, error:error};  
+    res.status(200).json(ret);
+});
 
     app.post('/api/updateprofile', async (req, res, next) =>
     {
