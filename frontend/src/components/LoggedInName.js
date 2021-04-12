@@ -6,11 +6,11 @@ function LoggedInName()
     //var _ud = localStorage.getItem('user_data');    
     //var ud = JSON.parse(_ud);
     
-    var tok = storage.retrieveToken();
-    var ud = jwt.decode(tok, {complete:true});
-    var userId = ud.payload.userId;    
-    var firstName = ud.payload.firstName;
-    var lastName = ud.payload.lastName;
+    const tok = storage.retrieveToken();
+    const ud = jwt.decode(tok, {complete:true});
+    //const userId = ud.payload.userId;
+    const firstName = 'john';//ud.payload.firstName;
+    const lastName = 'cena';//ud.payload.lastName;
   
     const doLogout = event =>     
     {    
@@ -24,6 +24,6 @@ function LoggedInName()
                 onClick={doLogout}> Log Out </button>      
         </div>    
     );
-};
+}
 
 export default LoggedInName;

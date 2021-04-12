@@ -4,23 +4,31 @@ import './App.css';
 import './Shared.css';
 
 import LoginRegisterPage from './pages/LoginRegisterPage';
-import CardPage from './pages/CardPage';
+import Dashboard from "./components/dashboard";
 
 function App()
 {
     return (
+        <Router>
+        <div className="App">
+            {/*<Navbar></Navbar>*/}
         <Router >
             <Switch>
                 <Route path="/" exact>
                     <LoginRegisterPage />
                 </Route>
-                <Route path="/cards" exact>
-                    <CardPage />
+                <Route path="/dashboard" exact>
+                    <Dashboard />
                 </Route>
+
                 <Redirect to="/" />
             </Switch>  
         </Router>
+        </div>
+        </Router>
     );
+
+
 }
 
 export default App;

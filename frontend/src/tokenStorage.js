@@ -2,7 +2,8 @@ exports.storeToken = function ( tok )
 {
     try
     {
-      localStorage.setItem('user_data', tok.accessToken);
+      localStorage.setItem('user_data', tok);
+      console.log(tok);
     }
     catch(e)
     {
@@ -12,10 +13,12 @@ exports.storeToken = function ( tok )
 
 exports.retrieveToken = function ()
 {
+
     var ud;
     try
     {
       ud = localStorage.getItem('user_data');
+      console.log(ud);
     }
     catch(e)
     {
