@@ -1198,7 +1198,7 @@ app.post('/api/register', async (req, res, next) =>
 
         for( var i=0; i<results.length; i++ )  
         {    
-            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
+            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "ServingSize":results[i].ServingSize, "TotalFat":results[i].TotalFat, "Sodium":results[i].Sodium, "TotalCarbs":results[i].TotalCarbs, "Protein":results[i].Protein, "mealId":results[i]._id});  
         }
 
         refreshedToken = jwt.refresh(jwtToken);
@@ -1209,7 +1209,7 @@ app.post('/api/register', async (req, res, next) =>
     app.post('/api/searchmealuser', async (req, res, next) => 
     {  
         // incoming: userId, jwtToken
-        // outgoing: results[], error  
+        // outgoing: results[], token, error  
         var error = '';  
         const { userId, jwtToken } = req.body; 
         
@@ -1228,7 +1228,7 @@ app.post('/api/register', async (req, res, next) =>
 
         for( var i=0; i<results.length; i++ )  
         {    
-            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
+            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "ServingSize":results[i].ServingSize, "TotalFat":results[i].TotalFat, "Sodium":results[i].Sodium, "TotalCarbs":results[i].TotalCarbs, "Protein":results[i].Protein, "mealId":results[i]._id});  
         }
 
         refreshedToken = jwt.refresh(jwtToken);
