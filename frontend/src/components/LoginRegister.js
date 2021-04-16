@@ -43,6 +43,7 @@ function LoginRegister()
     const [registerPersonalMessage, setRegisterPersonalMessage] = useState("");
     const [registerGoalMessage, setRegisterGoalMessage] = useState("");
     const [registerResetMessage, setRegisterResetMessage] = useState("");
+    const [registerVerifyMessage, setRegisterVerifyMessage] = useState("");
     const [form, setForm] = useState("Login");
 
     // Toggle between login and setup forms.
@@ -212,6 +213,40 @@ function LoginRegister()
             setRegisterResetMessage(e.toString());
         }
 
+        return false;
+    }
+
+    const resendEmail = async event =>
+    {
+        event.stopPropagation();
+        event.preventDefault();
+        setRegisterVerifyMessage('');
+
+        // Email resending.
+        var obj = {
+            email: Variables.registerVars.email.value
+        };
+        var json = JSON.stringify(obj);
+
+        try
+        {
+            const response = await fetch(bp.buildPath("api/resendverifyemail"), {method:"POST", body:json, headers:{"Content-Type": "application/json"}});
+            var responseObj = JSON.parse(await response.text());
+
+            if (responseObj.error !== "")
+            {
+                setRegisterVerifyMessage(responseObj.error);
+                return false;
+            }
+
+            setRegisterVerifyMessage("Email verification resent");
+        }
+        catch(e)
+        {
+            setRegisterVerifyMessage(e.toString());
+            return false;
+        }
+        
         return false;
     }
 
@@ -454,6 +489,8 @@ function LoginRegister()
             <img className="image" src={logo} alt="Not found"/>
             <div className="register-text">Email Confirmation Sent</div>
             <div className="register-subtext">Please check your associated inbox to confirm your email address.</div>
+            <button className="login-register-submit" type="submit" onClick={resendEmail}>Resend Email</button>
+            <div className="form-error-text">{registerVerifyMessage}</div>
             <button className="login-register-submit register-back" type="submit" onClick={changeFormConfirmation}>Back to login</button>
         </form>
     )

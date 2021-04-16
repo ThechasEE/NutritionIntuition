@@ -701,6 +701,59 @@ app.post('/api/register', async (req, res, next) =>
         var ret = { id:id, error: error, token:refreshedToken };  
         res.status(200).json(ret);
     });
+	
+	app.post('/api/mealtimecheck', async (req, res, next) =>
+    {
+        // incoming: UserId, jwtToken
+        // outgoing: mealtimeId (as id), token, error
+        
+        var error = '';
+        var id = -1;
+        var totalCal = 0;
+        var totalFat = 0;
+        var totalSodium = 0;
+        var totalCarbs = 0;
+        var totalProtein = 0;
+        var meals = [];
+        
+        const { userId, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();
+        var dat1 = new Date();
+        dat1.setHours(0,0,0,0);
+        var day = dat1.getDate();
+        var month = dat1.getMonth();
+        var year = dat1.getFullYear();
+        var tomorrow = new Date(dat1);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0,0,0,0);
+        var day2 = tomorrow.getDate();
+        var month2 = tomorrow.getMonth();
+        var year2 = tomorrow.getFullYear();
+        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat1), "$lte": new Date(tomorrow)}}).toArray();
+        var dat = Date.now();
+        if (check1.length > 0)
+        {
+            error = "Mealtime already created today"
+            id = check1[0]._id;
+        }
+        else
+        {
+            id = -1;
+            error = "No mealtime for todays date"
+        }
+
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { id:id, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
 
     app.post('/api/viewmealtime', async (req, res, next) =>
     {
@@ -1198,7 +1251,7 @@ app.post('/api/register', async (req, res, next) =>
 
         for( var i=0; i<results.length; i++ )  
         {    
-            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
+            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "ServingSize":results[i].ServingSize, "TotalFat":results[i].TotalFat, "Sodium":results[i].Sodium, "TotalCarbs":results[i].TotalCarbs, "Protein":results[i].Protein, "mealId":results[i]._id});  
         }
 
         refreshedToken = jwt.refresh(jwtToken);
@@ -1209,7 +1262,7 @@ app.post('/api/register', async (req, res, next) =>
     app.post('/api/searchmealuser', async (req, res, next) => 
     {  
         // incoming: userId, jwtToken
-        // outgoing: results[], error  
+        // outgoing: results[], token, error  
         var error = '';  
         const { userId, jwtToken } = req.body; 
         
@@ -1228,7 +1281,7 @@ app.post('/api/register', async (req, res, next) =>
 
         for( var i=0; i<results.length; i++ )  
         {    
-            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "mealId":results[i]._id});  
+            _ret.push( {"Name":results[i].Name, "Calories":results[i].Calories, "ServingSize":results[i].ServingSize, "TotalFat":results[i].TotalFat, "Sodium":results[i].Sodium, "TotalCarbs":results[i].TotalCarbs, "Protein":results[i].Protein, "mealId":results[i]._id});  
         }
 
         refreshedToken = jwt.refresh(jwtToken);
