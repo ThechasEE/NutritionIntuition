@@ -32,12 +32,11 @@ const MealManagementComponent = () => {
 
     const history = useHistory();
 
-    const searchMealTimeFetch = async => {
+    const checkIfMealExistForToday = (e) => {
         //prevents page inputs from being refreshed
         //create a meal
-        const date = {
+        const requestObj = {
             userId: userId,
-            dateRange: 1,
             tok: tok
         }
 
@@ -49,19 +48,15 @@ const MealManagementComponent = () => {
             //we are sending json data
             headers: {"Content-Type": "application/json"},
             //actual data we are sending with this request
-            body: JSON.stringify(date)
+            body: JSON.stringify(requestObj)
         }).then(() => {
             //add error checking for duplicate meal
             setIsPending(false);
-            //history.go(-1);
-            //history.push('/')
         })
-        //get values
-        //returns an array of dates
         if(response.text != null) {
-            const responseObj = JSON.parse(response.text);
-            //TODO change this to store an array for multiuse
-            setMealDateId(responseObj.mealtimeId[0]);
+            todayMealExists = true;
+        }else{
+            todayMealExists = false;
         }
     }
 
@@ -95,9 +90,33 @@ const MealManagementComponent = () => {
     let todayMeal;
     let todayMealExists;
     //first time load of today's stats
+    // function LoadToday(){
+    //     useEffect(() => {
+    //         todayMeal = searchMealTimeFetch();
+    //     }, [])
+    //     if(todayMeal != null) {
+    //         todayMealExists = true;
+    //         return (
+    //             <div className="create">
+    //                 <h2>Today's Stats</h2>
+    //                 {}
+    //                 <label>Today's Calories so Far:</label>
+    //                 <p>{mealDateId}</p>
+    //             </div>
+    //         )
+    //     }else{
+    //         todayMealExists = false;
+    //         return (
+    //             <div className="create">
+    //                 <h2>No data for today, lets add in a meal!</h2>
+    //
+    //             </div>
+    //         )
+    //     }
+    // }
     function LoadToday(){
         useEffect(() => {
-            todayMeal = searchMealTimeFetch();
+            todayMeal = checkIfMealExistForToday();
         }, [])
         if(todayMeal != null) {
             todayMealExists = true;
@@ -119,7 +138,6 @@ const MealManagementComponent = () => {
             )
         }
     }
-
 
     //page load logic
     LoadToday();

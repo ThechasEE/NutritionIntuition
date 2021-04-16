@@ -29,10 +29,15 @@ const Dashboard = () =>
         };
         var json = JSON.stringify(obj);
 
+
         try{
             //this should get the user's date object
-        const response = fetch(bp.buildPath("api/searchmealuser"), {method:"POST", body:json,headers:{"Content-Type": "application/json"}});
-        var responseObj = JSON.parse(response.text);
+        const response = fetch(bp.buildPath("api/mealtimecheck"), {
+            method:"POST",
+            body:json,
+            headers:{"Content-Type": "application/json"}
+        });
+        const responseObj = JSON.parse(response.text());
 
         meals = responseObj;
         }catch(e){

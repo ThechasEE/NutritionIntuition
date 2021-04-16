@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
+import {useEffect, useState} from "react";
+
 import LoggedInName from "./LoggedInName";
 import React from "react";
+import bp from "./bp";
 const Navbar = () => {
     //Data
 
@@ -8,6 +11,7 @@ const Navbar = () => {
     const jwt = require("jsonwebtoken");
     //var _ud = localStorage.getItem('user_data');
     //var ud = JSON.parse(_ud);
+    const [isPending, setIsPending] = useState(false);
 
     const tok = storage.retrieveToken();
     const ud = jwt.decode(tok, {complete:true});
@@ -15,10 +19,47 @@ const Navbar = () => {
     const firstName = ud.payload.firstName;
     const lastName = ud.payload.lastName;
 
-    
+    //do a mealtime check to get todayMealExists
 
+    let todayMealExists;
 
+    const checkIfMealExistForToday = (e) => {
 
+        //prevents page inputs from being refreshed
+        //create a meal
+        const requestObj = {
+            userId: userId,
+            tok: tok
+        }
+
+        setIsPending(true);
+
+        //TODO change to get most research and not search
+        const response = fetch(bp.buildPath("api/searchmealtime"), {
+            method: 'POST',
+            //we are sending json data
+            headers: {"Content-Type": "application/json"},
+            //actual data we are sending with this request
+            body: JSON.stringify(requestObj)
+        }).then(() => {
+            //add error checking for duplicate meal
+            setIsPending(false);
+        })
+        if(response.text != null) {
+            todayMealExists = true;
+        }else{
+            todayMealExists = false;
+        }
+    }
+    //use this when calling functions that can render so many times ;-;
+    function LoadToday(){
+        useEffect(() => {
+            checkIfMealExistForToday();
+        }, [])
+    }
+
+    //page load logic
+    LoadToday();
 
     const doLogout = event =>
     {
@@ -42,19 +83,12 @@ const Navbar = () => {
                         },
                     }}
                           style={{
-                              color: "white",
-                              backgroundColor: '#13ae1d',
+                              color: "gray",
                               borderRadius: '12px'
                           }}
-                    >Add new Meal</Link>
+                    >Quick Add</Link>
                 </li>
-                <li>
-                    <Link to="/create" style={{
-                        color: "grey",
-                        //change to "Link to" instead of "a href" when you don't
-                        //want to talk to the server
-                    }}>Quick Add</Link>
-                </li>
+
                 <li>
                     <Link to="/create" style={{
                         color: "grey",

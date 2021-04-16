@@ -41,7 +41,45 @@ const CreateMeal = () => {
     const [error,setError] = useState(null);
 
 
+    const addMealToDay = (e) =>{
+        //prevents page inputs from being refreshed
+        e.preventDefault();
+        //create our first meal that will help construct today's
+        //meal date.
+        var mealToAdd = {
+            mealtimeId: mealtimeId,
+            info: [
+                {
+                    mealId: mealId,
+                    //change to increment amount consumed
+                    amountConsumed: 1
+                }
+            ],
+            jwtToken: tok
+        };
+        setIsPending(true);
+        try {
+            const response = fetch(bp.buildPath("api/addmeals"), {
+                method: 'POST',
+                //we are sending json data
+                headers: {"Content-Type": "application/json"},
+                //actual data we are sending with this request
+                body: JSON.stringify(mealToAdd)
+            })
+            //store result from server
+            const responseObj = JSON.parse(response.text());
+            if(responseObj.error !== ""){
+                //output to user
+            }
+            setMealtimeToken(responseObj.accessToken);
+        }catch(e){
+            //TODO have functionality to display the error to the user similar
+            //to login
+        }
 
+
+        //history.push('/dashboard')
+    }
 
     //done create day if first meal of the day.
     const createMealDay = (e) => {
@@ -62,7 +100,7 @@ const CreateMeal = () => {
         };
         setIsPending(true);
         try {
-            const response = fetch(bp.buildPath("api/addmeal"), {
+            const response = fetch(bp.buildPath("api/addmealtime"), {
                 method: 'POST',
                 //we are sending json data
                 headers: {"Content-Type": "application/json"},
@@ -71,7 +109,7 @@ const CreateMeal = () => {
             })
             //store result from server
             const responseObj = JSON.parse(response.text());
-            if(responseObj.error != ""){
+            if(responseObj.error !== ""){
                 //output to user
             }
             setMealtimeToken(responseObj.accessToken);
@@ -86,7 +124,7 @@ const CreateMeal = () => {
     }
 
     //done
-    const searchMealByName = (e) => {
+    const searchMealByNameClosetMatch = (e) => {
         //prevents page inputs from being refreshed
         e.preventDefault();
         //get a meal from id (send)
@@ -97,7 +135,7 @@ const CreateMeal = () => {
         };
 
         try {
-            const response = fetch(bp.buildPath("api/viewMeal"), {
+            const response = fetch(bp.buildPath("api/searchmealname"), {
                 method: 'POST',
                 //we are sending json data
                 headers: {"Content-Type": "application/json"},
@@ -123,8 +161,6 @@ const CreateMeal = () => {
             //TODO error checking?
             console.log("fail.");
         }
-
-
     }
 
     // //TODO get the meal via ID.
@@ -207,87 +243,38 @@ const CreateMeal = () => {
         //prevents page inputs from being refreshed
         e.preventDefault();
         //check if the meal exists, or create a new meal
-        //search for name, will update the mealId
+        //search if this meal item exists
         searchedMealName();
         if(mealId != null){
+            //meal item does exist
             //TODO check if mealDate exists for today
+            if(!todayMealExists){
+                //TODO create a new day
+                createMealDay(); // ADD
+            }
             //meal exists in db
             //todo call the addMealToDate method
             //TODO now create the new date or append
         }else {
-            //create meal in DB
+            //create meal in DB,meal item does not exist
             //this will create a new meal, and search its own name in the db and
             //as a result will store its token we can append to the day
             createANewMeal();
+            //TODO check if mealDate exists for today
+            if(!todayMealExists){
+                //TODO create a new day
+                createMealDay();
+            }
+            //append the meal we just created to the date.
+            //TODO append item to day
 
 
-
-            // //prevents page inputs from being refreshed
-            // e.preventDefault();
-            // //create a meal
-            // var meal = {
-            //     userId: userId,
-            //     name: name,
-            //     calories: calories,
-            //     servingSize: servingSize,
-            //     totalFat: totalFat,
-            //     sodium: sodium,
-            //     totalCarbs: totalCarbs,
-            //     protein: protein,
-            //     jwtToken: tok
-            // };
-            // //const meal = {userId, name, calories, servingSize, totalFat, sodium, totalCarbs, protein, tok};
-            //
-            // setIsPending(true);
-            //
-            // fetch(bp.buildPath("api/addmeal"), {
-            //     method: 'POST',
-            //     //we are sending json data
-            //     headers: {"Content-Type": "application/json"},
-            //     //actual data we are sending with this request
-            //     body: JSON.stringify(meal)
-            // }).then(res => {
-            //     if (!res.ok) {
-            //         throw Error('could not fetch the data from that resource');
-            //         //is thrown to our catch below
-            //     }
-            //     //resolution of the promise
-            //     return res.json();
-            // })
-            //     .then(data => {
-            //         console.log(data);
-            //         //we do this to initlize the id for our date
-            //         setSearchedMealName(name);
-            //
-            //         setIsPending(false);
-            //         setError(null);
-            //
-            //         //TODO now create the new date or append
-            //     })
-            //     .catch((err) => {
-            //         //check for our abort check
-            //         setIsPending(false);
-            //         setError(err.message);
-            //
-            //     })
-            // .then(() => {
-            //     //add error checking for duplicate meal
-            //     setIsPending(false);
-            //     setSearchedMealName(name);
-            //     //handle creating a day if it doesn't exist
-            //     if(todayMealExists){
-            //         //add the meal to the current day
-            //     }else{
-            //         //create a day
-            //
-            //     }
-            //     history.push('/dashboard')
-            // })
-
-            //history.push('/dashboard')
         }
 
     }
+
+
+
     return (
         <div className="create">
             <h2>Add an existing meal by searching below:</h2>
@@ -362,15 +349,15 @@ const CreateMeal = () => {
                 />
                 { !isPending && <button>Add Meal</button>}
                 { isPending && <button disabled>Adding meal...</button>}
-                <p>{userId}</p>
-                <p>{name}</p>
-                <p>{calories}</p>
-                <p>{servingSize}</p>
-                <p>{totalFat}</p>
-                <p>{sodium}</p>
-                <p>{totalCarbs}</p>
-                <p>{protein}</p>
-                <p>{tok}</p>
+                {/*<p>{userId}</p>*/}
+                {/*<p>{name}</p>*/}
+                {/*<p>{calories}</p>*/}
+                {/*<p>{servingSize}</p>*/}
+                {/*<p>{totalFat}</p>*/}
+                {/*<p>{sodium}</p>*/}
+                {/*<p>{totalCarbs}</p>*/}
+                {/*<p>{protein}</p>*/}
+                {/*<p>{tok}</p>*/}
             </form>
         </div>
     );

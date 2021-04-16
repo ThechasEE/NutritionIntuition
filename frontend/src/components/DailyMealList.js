@@ -1,4 +1,5 @@
 import {Link} from "react-router-dom";
+import {useState} from "react";
 
 //given the necessary data to display (called externally)
 const DailyMealList = ({data: meals, title, range}) => {
@@ -7,33 +8,54 @@ const DailyMealList = ({data: meals, title, range}) => {
     const tok = storage.retrieveToken();
     const ud = jwt.decode(tok, {complete:true});
     const userId = ud.payload.userId;
-
+    const [isPending, setIsPending] = useState(false);
+    const [localRange, setLocalRange] = useState(range);
     const bp = require("./bp.js");
-    //collect data for components
-    var requestObj = {
-        userId: userId,
-        range: range,
-        jwtToken: tok
-    };
 
-    try{
-        //this should get the user's date object
-        const response = fetch(bp.buildPath("api/searchmealtime"), {
-            method:"POST",
-            body: JSON.stringify(requestObj),
-            headers:{"Content-Type": "application/json"}
-        });
-        var responseObj = JSON.parse(response.text);
+    const getMealHistory = (e) => {
+        e.preventDefault();
 
-        meals = responseObj;
-    }catch(e) {
-        console.log("error");
-        meals = null;
+        //collect data for components
+        var requestObj = {
+            userId: userId,
+            range: range,
+            jwtToken: tok
+        };
+
+        try {
+            //this should get the user's date object
+            const response = fetch(bp.buildPath("api/searchmealtime"), {
+                method: "POST",
+                body: JSON.stringify(requestObj),
+                headers: {"Content-Type": "application/json"}
+            });
+            meals = JSON.parse(response.text);
+        } catch (e) {
+            console.log("error");
+            meals = null;
+        }
     }
+
+    //initial call to default value of 7
+    getMealHistory();
 
     return(
         <div className="meal-list">
+            {/*Todo add a form to update date*/}
             <h2>{title}</h2>
+            <form onSubmit={ getMealHistory }>
+                <label>Input how many days you wish to see:</label>
+                <input
+                    type="text"
+                    required
+                    value={localRange}
+                    //allows us to get the html data and save it in our title
+                    onChange={(e) => setLocalRange(e.target.value)}
+                />
+
+                { !isPending && <button>Submit</button>}
+                { isPending && <button disabled>Submitting...</button>}
+            </form>
             {meals.map((meal) => (
                 <div className="meal-preview" key={meal.id}>
                     {/*template string ` ` allows variables (JS) using $*/}
