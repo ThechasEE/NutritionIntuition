@@ -30,7 +30,10 @@
 
 }
 
+.links{
 
+    margin-left: auto;
+}
 /* Meal LIST */
 
 .meal-preview {
@@ -121,24 +124,47 @@
 
     align-items: center;
 
-    max-width: 600px;
 
     margin: 0 auto;
 
     border-bottom: 1px solid #f2f2f2;
 
+    min-width: 600px;
+    max-width: 80%;
+
+    margin: 0 auto;
+
+
 }
 
 .navbar h1 {
 
-    color: #be09ec;
+    color: #04a039;
 
 }
 
 .navbar .links {
 
     margin-left: auto;
+}
+.navbar li{
+    display: inline;
+    padding: 10px;
 
+}
+
+.navbar button {
+    margin-left: auto;
+    color: white;
+    background-color: #13ae1d;
+    border-radius: 12px;
+    padding: 10px;
+    border: none;
+}
+
+.navbar button:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
 }
 
 .navbar a {
@@ -154,5 +180,84 @@
 .navbar a:hover {
 
     color: #c30de5;
+
+}
+
+/* create new blog form */
+
+.create {
+
+    max-width: 400px;
+
+    margin: 0 auto;
+
+    text-align: center;
+
+}
+
+.create label {
+
+    text-align: left;
+
+    display: block;
+
+}
+
+.create h2 {
+
+    font-size: 20px;
+
+    color: #45cb1d;
+
+    margin-bottom: 30px;
+
+}
+
+.create input, .create textarea, .create select {
+
+    width: 100%;
+
+    padding: 6px 10px;
+
+    margin: 10px 0;
+
+    border: 1px solid #ddd;
+
+    box-sizing: border-box;
+
+    display: block;
+
+}
+
+.create button {
+
+    background: #244802;
+
+    color: #fff;
+
+    border: 0;
+
+    padding: 8px;
+
+    border-radius: 8px;
+
+    cursor: pointer;
+
+}
+
+.create .links{
+
+
+    min-width: 10px;
+    max-width: 30%;
+
+    margin: 0 auto;
+    margin-left: auto;
+
+    border-bottom: 1px solid #f2f2f2;
+    color: white;
+    background-color: #13ae1d;
+    border-radius: 12px;
+    padding: 10px;
 
 }

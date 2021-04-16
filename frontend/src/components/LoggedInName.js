@@ -8,9 +8,9 @@ function LoggedInName()
     
     const tok = storage.retrieveToken();
     const ud = jwt.decode(tok, {complete:true});
-    //const userId = ud.payload.userId;
-    const firstName = 'john';//ud.payload.firstName;
-    const lastName = 'cena';//ud.payload.lastName;
+    const userId = ud.payload.userId;
+    const firstName = ud.payload.firstName;
+    const lastName = ud.payload.lastName;
   
     const doLogout = event =>     
     {    
@@ -18,11 +18,11 @@ function LoggedInName()
         alert('doLogout');    
     };        
     return(      
-        <div id="loggedInDiv">        
-            <span id="userName">Logged In As {firstName} {lastName}</span><br />        
-            <button type="button" id="logoutButton" class="buttons"            
-                onClick={doLogout}> Log Out </button>      
-        </div>    
+        <div id="loggedInDiv">
+            <div>Logged In as {firstName} {lastName}
+            </div>
+        </div>
+
     );
 }
 
