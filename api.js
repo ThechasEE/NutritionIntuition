@@ -832,6 +832,46 @@ app.post('/api/register', async (req, res, next) =>
         var ret = { id:id, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
+	
+	app.post('/api/mealtimecheckdate', async (req, res, next) =>
+    {
+        // incoming: UserId, day, month, year, jwtToken
+        // outgoing: mealtimeId (as id), token, error
+        
+        var error = '';
+        var id = -1;        
+        const { userId, day, month, year, jwtToken } = req.body;
+        
+        if( jwt.isExpired(jwtToken))
+        {
+            var r = {error:'The JWT is no longer valid'};
+            res.status(200).json(r);
+            return;
+        }
+
+        const db = client.db();
+        var dat1 = new Date(year, month - 1, day);
+        dat1.setHours(0,0,0,0);
+        var tomorrow = new Date(dat1);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0,0,0,0);
+        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat1), "$lte": new Date(tomorrow)}}).toArray();
+
+        if (check1.length > 0)
+        {
+            error = "Mealtime already created today"
+            id = check1[0]._id;
+        }
+        else
+        {
+            id = -1;
+            error = "No mealtime for todays date"
+        }
+
+        refreshedToken = jwt.refresh(jwtToken);
+        var ret = { id:id, token:refreshedToken, error:error};  
+        res.status(200).json(ret);
+    });
 
     app.post('/api/viewmealtime', async (req, res, next) =>
     {
