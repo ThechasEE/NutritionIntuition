@@ -1,9 +1,7 @@
-import {useEffect, useState} from "react";
-import {Link, useHistory} from 'react-router-dom';
 import bp from "./bp";
+import {useHistory} from "react-router-dom";
 
-const MealManagementComponent = () => {
-    //token
+export function checkIfMealToday(){
     const storage = require('../tokenStorage.js');
     const jwt = require("jsonwebtoken");
     //var _ud = localStorage.getItem('user_data');
@@ -119,63 +117,4 @@ const MealManagementComponent = () => {
             )
         }
     }
-
-
-    //page load logic
-    LoadToday();
-
-
-
-    const addMealsFetch = async (e) => {
-        //prevents page inputs from being refreshed
-        e.preventDefault();
-        //create a meal
-        const date = {userId, dateRange, tok};
-
-        setIsPending(true);
-
-        const response = fetch(bp.buildPath("api/addmeals"), {
-            method: 'POST',
-            //we are sending json data
-            headers: {"Content-Type": "application/json"},
-            //actual data we are sending with this request
-            body: JSON.stringify(date)
-        }).then(() => {
-            //add error checking for duplicate meal
-            setIsPending(false);
-            //history.go(-1);
-            //history.push('/')
-        })
-        //get values
-        var responseObj = JSON.parse(await response.text);
-        //TODO have this set the specific date
-        //TODO we want to append this to our meal list
-        setMealDateId(responseObj.mealtimeId);
-
-    }
-    console.log(todayMealExists);
-
-    return (
-        <div className="create">
-            <h1>Hello, {firstName}</h1>
-            {LoadToday()}
-
-            <div className="links">
-                <Link to={{
-                        pathname: '/addMeal/' + todayMealExists,
-                        state: {
-                            todayMealExists: todayMealExists,
-                        },
-                    }}
-                      style={{
-                          color: "white",
-                          backgroundColor: '#13ae1d',
-                          borderRadius: '12px'
-                      }}
-                    >Add new Meal</Link>
-            </div>
-        </div>
-    );
 }
-
-export default MealManagementComponent;

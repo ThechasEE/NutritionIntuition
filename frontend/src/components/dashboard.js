@@ -4,7 +4,7 @@ import DailyMealList from "./DailyMealList";
 import {BrowserRouter as Router} from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import CreateMeal from "./AddMeal";
-import CreateDay from "./addMealDay";
+import MealManagementComponent from "./addMealDay";
 
 const Dashboard = () =>
 {
@@ -52,8 +52,9 @@ const Dashboard = () =>
                 {/*error && <div> {error} </div>}
                 {isPending && <div>Loading...</div>*/}
                 {meals &&
-                <DailyMealList meals={meals.filter((meal) => meal.userId === 'something')} title="Meals Test"/>}
-                <CreateDay/>
+                <DailyMealList title="Meals Test" range={7}/>}
+                {/*<DailyMealList meals={meals} title="Meals Test" range={7}/>}*/}
+                <MealManagementComponent/>
                 {/*<CreateMeal/>*/}
 
             </div>

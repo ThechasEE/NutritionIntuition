@@ -1,8 +1,35 @@
 import {Link} from "react-router-dom";
 
 //given the necessary data to display (called externally)
-const DailyMealList = ({meals: meals, title}) => {
+const DailyMealList = ({data: meals, title, range}) => {
+    const jwt = require("jsonwebtoken");
+    const storage = require("../tokenStorage.js");
+    const tok = storage.retrieveToken();
+    const ud = jwt.decode(tok, {complete:true});
+    const userId = ud.payload.userId;
 
+    const bp = require("./bp.js");
+    //collect data for components
+    var requestObj = {
+        userId: userId,
+        range: range,
+        jwtToken: tok
+    };
+
+    try{
+        //this should get the user's date object
+        const response = fetch(bp.buildPath("api/searchmealtime"), {
+            method:"POST",
+            body: JSON.stringify(requestObj),
+            headers:{"Content-Type": "application/json"}
+        });
+        var responseObj = JSON.parse(response.text);
+
+        meals = responseObj;
+    }catch(e) {
+        console.log("error");
+        meals = null;
+    }
 
     return(
         <div className="meal-list">
