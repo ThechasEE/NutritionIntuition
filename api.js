@@ -701,7 +701,7 @@ app.post('/api/register', async (req, res, next) =>
         var ret = { id:id, error: error, token:refreshedToken };  
         res.status(200).json(ret);
     });
-
+	
 	app.post('/api/mealtimecheck', async (req, res, next) =>
     {
         // incoming: UserId, jwtToken
@@ -725,30 +725,35 @@ app.post('/api/register', async (req, res, next) =>
             return;
         }
 
-        const db = client.db();  
-        const check = await db.collection('Mealtime').find({"UserId":userId}).sort({$natural:-1}).limit(1).toArray();
+        const db = client.db();
+        var dat1 = new Date();
+        dat1.setHours(0,0,0,0);
+        var day = dat1.getDate();
+        var month = dat1.getMonth();
+        var year = dat1.getFullYear();
+        var tomorrow = new Date(dat1);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        tomorrow.setHours(0,0,0,0);
+        var day2 = tomorrow.getDate();
+        var month2 = tomorrow.getMonth();
+        var year2 = tomorrow.getFullYear();
+        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat1), "$lte": new Date(tomorrow)}}).toArray();
         var dat = Date.now();
-        if (check.length > 0)
+        if (check1.length > 0)
         {
-            var datTest = check[0].Date.toDateString();
-            var datToday = new Date(dat).toDateString();
-
-            if (datTest === datToday)
-            {
-                error = "Mealtime already created today"
-                id = check[0]._id;
-            }
-            else
-            {
-                id = -1;
-                error = "No mealtime for todays date"
-            }
+            error = "Mealtime already created today"
+            id = check1[0]._id;
+        }
+        else
+        {
+            id = -1;
+            error = "No mealtime for todays date"
         }
 
         refreshedToken = jwt.refresh(jwtToken);
         var ret = { id:id, token:refreshedToken, error:error};  
         res.status(200).json(ret);
-    });	
+    });
 
     app.post('/api/viewmealtime', async (req, res, next) =>
     {
