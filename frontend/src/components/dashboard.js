@@ -46,7 +46,8 @@ const Dashboard = () =>
         }
         //console.log(responseObj);
     }else{
-        //redirect to login
+        window.location.href = "/login";
+        return false;
     }
 
     return (
