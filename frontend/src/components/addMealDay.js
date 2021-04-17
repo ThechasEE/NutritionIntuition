@@ -26,157 +26,145 @@ const MealManagementComponent = () => {
     const [totalProtein, setTotalProtein] = useState('');
     const [dateRange, setDateRange] = useState(1);
     const [meals, setMeals] = useState('');
+    const [mealTimeId, setMealTimeId] = useState('');
+    const [mealTimeObj, setMealTimeObj] = useState('');
 
-
+    const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(false);
+    const [todayMealExists, setTodayMealExists] = useState(false);
 
     const history = useHistory();
 
-    const checkIfMealExistForToday = (e) => {
+    const searchMealTimeById = () => {
         //prevents page inputs from being refreshed
-        //create a meal
-        const requestObj = {
-            userId: userId,
-            tok: tok
-        }
-
+        //e.preventDefault();
+        //create our first meal that will help construct today's
+        //meal date.
+        const firstMeal = {
+            mealId: mealTimeId,
+            jwtToken: tok
+        };
         setIsPending(true);
 
-        //TODO change to get most research and not search
-        const response = fetch(bp.buildPath("api/searchmealtime"), {
+        fetch(bp.buildPath("api/viewmealtime"), {
             method: 'POST',
             //we are sending json data
             headers: {"Content-Type": "application/json"},
             //actual data we are sending with this request
-            body: JSON.stringify(requestObj)
-        }).then(() => {
-            //add error checking for duplicate meal
-            setIsPending(false);
+            body: JSON.stringify(firstMeal)
+        }).then(res => {
+            if(!res.ok){
+                throw Error('could not fetch the data from that resource');
+                //is thrown to our catch below
+            }
+            //resolution of the promise
+            return res.json();
         })
-        if(response.text != null) {
-            todayMealExists = true;
-        }else{
-            todayMealExists = false;
-        }
-    }
+            .then(data => {
+                if(data.error === '') {
+                    setMealTimeObj(data);
+                }
+                else{
+                    setMealTimeObj(data);
+                }//store the meal data
 
-    // const viewMealTimeFetch = async (e) => {
-    //     //prevents page inputs from being refreshed
-    //     e.preventDefault();
-    //     //create a meal
-    //     const date = {userId, dateRange, tok};
-    //
-    //     setIsPending(true);
-    //
-    //     const response = fetch(bp.buildPath("api/viewmealtime"), {
-    //         method: 'POST',
-    //         //we are sending json data
-    //         headers: {"Content-Type": "application/json"},
-    //         //actual data we are sending with this request
-    //         body: JSON.stringify(date)
-    //     }).then(() => {
-    //         //add error checking for duplicate meal
-    //         setIsPending(false);
-    //         //history.go(-1);
-    //         //history.push('/')
-    //     })
-    //     //get values
-    //     var responseObj = JSON.parse(await response.text);
-    //     //TODO have this set the specific date
-    //     //TODO we want to append this to our meal list
-    //     setMealDateId(responseObj.mealtimeId);
-    //
-    // }
-    let todayMeal;
-    let todayMealExists;
-    //first time load of today's stats
-    // function LoadToday(){
-    //     useEffect(() => {
-    //         todayMeal = searchMealTimeFetch();
-    //     }, [])
-    //     if(todayMeal != null) {
-    //         todayMealExists = true;
-    //         return (
-    //             <div className="create">
-    //                 <h2>Today's Stats</h2>
-    //                 {}
-    //                 <label>Today's Calories so Far:</label>
-    //                 <p>{mealDateId}</p>
-    //             </div>
-    //         )
-    //     }else{
-    //         todayMealExists = false;
-    //         return (
-    //             <div className="create">
-    //                 <h2>No data for today, lets add in a meal!</h2>
-    //
-    //             </div>
-    //         )
-    //     }
-    // }
+                setIsPending(false);
+                setError(null);
+            })
+            .catch((err) => {
+                //check for our abort check
+                setIsPending(false);
+                setError(err.message);
+
+            })
+
+    }
+    const checkIfMealExistsToday = () => {
+        //collect data for components
+        var obj = {
+            userId: userId,
+            jwtToken: tok
+        }
+
+        setIsPending(true);
+
+        fetch(bp.buildPath("api/mealtimecheck"), {
+            method: 'POST',
+            //we are sending json data
+            headers: {"Content-Type": "application/json"},
+            //actual data we are sending with this request
+            body: JSON.stringify(obj)
+        }).then(res => {
+            if (!res.ok) {
+                throw Error('could not fetch the data from that resource');
+                //is thrown to our catch below
+            }
+            //resolution of the promise
+            return res.json();
+        })
+            .then(data => {
+                if (data.error === '') {
+                    setTodayMealExists(false)
+                    setMealTimeId(data.id)
+                    return data.id
+
+                } else {
+                    //date already exists,
+                    setTodayMealExists(true)
+                    setMealTimeId(data.id)
+                    return data.id
+                    //console.log("The meal Id we found is: " +  data.id)
+                    //setMealId(null)
+                }//store the meal data
+
+                setIsPending(false);
+                setError(null);
+            })
+            .catch((err) => {
+                //check for our abort check
+                setIsPending(false);
+                setError(err.message);
+
+            })
+    }
     function LoadToday(){
         useEffect(() => {
-            todayMeal = checkIfMealExistForToday();
-        }, [])
-        if(todayMeal != null) {
-            todayMealExists = true;
-            return (
-                <div className="create">
-                    <h2>Today's Stats</h2>
-                    {}
-                    <label>Today's Calories so Far:</label>
-                    <p>{mealDateId}</p>
-                </div>
-            )
-        }else{
-            todayMealExists = false;
-            return (
-                <div className="create">
-                    <h2>No data for today, lets add in a meal!</h2>
-
-                </div>
-            )
-        }
+            checkIfMealExistsToday();
+            console.log(mealTimeId)
+        }, [todayMealExists, mealTimeId])
     }
 
-    //page load logic
+    function LoadTodaysMeal(){
+        useEffect(() => {
+            searchMealTimeById(mealTimeId);
+            console.log(mealTimeObj)
+        }, [todayMealExists, mealTimeId])
+    }
+
+    function LoadTodaysMeal2(){
+        useEffect(() => {
+            searchMealTimeById(mealTimeId);
+            console.log(mealTimeObj)
+        }, [])
+    }
     LoadToday();
 
 
 
-    const addMealsFetch = async (e) => {
-        //prevents page inputs from being refreshed
-        e.preventDefault();
-        //create a meal
-        const date = {userId, dateRange, tok};
 
-        setIsPending(true);
-
-        const response = fetch(bp.buildPath("api/addmeals"), {
-            method: 'POST',
-            //we are sending json data
-            headers: {"Content-Type": "application/json"},
-            //actual data we are sending with this request
-            body: JSON.stringify(date)
-        }).then(() => {
-            //add error checking for duplicate meal
-            setIsPending(false);
-            //history.go(-1);
-            //history.push('/')
-        })
-        //get values
-        var responseObj = JSON.parse(await response.text);
-        //TODO have this set the specific date
-        //TODO we want to append this to our meal list
-        setMealDateId(responseObj.mealtimeId);
-
-    }
-    console.log(todayMealExists);
 
     return (
         <div className="create">
             <h1>Hello, {firstName}</h1>
             {LoadToday()}
+            {LoadTodaysMeal()}
+            {LoadTodaysMeal2()}
+            <h2>{mealTimeObj.date}</h2>
+            <p>Total Fat: {mealTimeObj.totalFat}g</p>
+            <p>Total Sodium: {mealTimeObj.totalCarbs}g</p>
+            <p>Total Carbs: {mealTimeObj.totalProtein}g</p>
+            <p>Total Protein: {mealTimeObj.totalSodium}g</p>
+            <h3>Total calories: {mealTimeObj && mealTimeObj.totalCal}</h3>
 
             <div className="links">
                 <Link to={{

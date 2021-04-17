@@ -1,8 +1,9 @@
 import {Link} from "react-router-dom";
-import {useState} from "react";
+import {useEffect, useState} from "react";
+import bp from "./bp";
 
 //given the necessary data to display (called externally)
-const DailyMealList = ({data: meals, title, range}) => {
+const DailyMealList = ({data: title, range}) => {
     const jwt = require("jsonwebtoken");
     const storage = require("../tokenStorage.js");
     const tok = storage.retrieveToken();
@@ -12,8 +13,58 @@ const DailyMealList = ({data: meals, title, range}) => {
     const [localRange, setLocalRange] = useState(range);
     const bp = require("./bp.js");
 
-    const getMealHistory = (e) => {
-        e.preventDefault();
+    const[meals, setMeals] = useState('');
+    const [error,setError] = useState(null);
+
+    const searchMealById = (mealId) => {
+        let mealReturn;
+        console.log("creating day");
+        //prevents page inputs from being refreshed
+        //e.preventDefault();
+        //create our first meal that will help construct today's
+        //meal date.
+        const firstMeal = {
+            mealId: mealId,
+            jwtToken: tok
+        };
+        setIsPending(true);
+
+        fetch(bp.buildPath("api/viewmeal"), {
+            method: 'POST',
+            //we are sending json data
+            headers: {"Content-Type": "application/json"},
+            //actual data we are sending with this request
+            body: JSON.stringify(firstMeal)
+        }).then(res => {
+            if(!res.ok){
+                throw Error('could not fetch the data from that resource');
+                //is thrown to our catch below
+            }
+            //resolution of the promise
+            return res.json();
+        })
+            .then(data => {
+                if(data.error === '') {
+                    mealReturn = data;
+                }
+                else{
+                    mealReturn = null;
+                }//store the meal data
+
+                setIsPending(false);
+                setError(null);
+            })
+            .catch((err) => {
+                //check for our abort check
+                setIsPending(false);
+                setError(err.message);
+
+            })
+
+    }
+
+    //implement search by id
+    const getMealHistory = () => {
 
         //collect data for components
         var requestObj = {
@@ -21,23 +72,53 @@ const DailyMealList = ({data: meals, title, range}) => {
             range: range,
             jwtToken: tok
         };
+        setIsPending(true);
 
-        try {
-            //this should get the user's date object
-            const response = fetch(bp.buildPath("api/searchmealtime"), {
-                method: "POST",
-                body: JSON.stringify(requestObj),
-                headers: {"Content-Type": "application/json"}
-            });
-            meals = JSON.parse(response.text);
-        } catch (e) {
-            console.log("error");
-            meals = null;
-        }
+        fetch(bp.buildPath("api/searchmealtime"), {
+            method: 'POST',
+            //we are sending json data
+            headers: {"Content-Type": "application/json"},
+            //actual data we are sending with this request
+            body: JSON.stringify(requestObj)
+        }).then(res => {
+            if(!res.ok){
+                throw Error('could not fetch the data from that resource');
+                //is thrown to our catch below
+            }
+            //resolution of the promise
+            return res.json();
+        })
+            .then(data => {
+                if(data.error === '') {
+                //setMeals(data.results)
+                console.log(data.results);
+                setMeals(data.results);
+                console.log("mEALS:" + meals);
+                }
+                else{
+                    setMeals('');
+                }//store the meal data
+
+                setIsPending(false);
+                setError(null);
+            })
+            .catch((err) => {
+                //check for our abort check
+                setIsPending(false);
+                setError(err.message);
+                setMeals('');
+
+            })
+
+    }
+    function LoadMealHistory(){
+        useEffect(() => {
+            getMealHistory();
+        }, [])
     }
 
+    LoadMealHistory();
     //initial call to default value of 7
-    getMealHistory();
 
     return(
         <div className="meal-list">
@@ -45,6 +126,7 @@ const DailyMealList = ({data: meals, title, range}) => {
             <h2>{title}</h2>
             <form onSubmit={ getMealHistory }>
                 <label>Input how many days you wish to see:</label>
+                <br/>
                 <input
                     type="text"
                     required
@@ -56,7 +138,8 @@ const DailyMealList = ({data: meals, title, range}) => {
                 { !isPending && <button>Submit</button>}
                 { isPending && <button disabled>Submitting...</button>}
             </form>
-            {meals.map((meal) => (
+            {console.log(meals)}
+            {meals && meals.map((meal) => (
                 <div className="meal-preview" key={meal.id}>
                     {/*template string ` ` allows variables (JS) using $*/}
                     <Link to={`/meals/${meal.id}`}>
@@ -71,9 +154,10 @@ const DailyMealList = ({data: meals, title, range}) => {
                         <br></br>
                         <h2>Meals Eaten:</h2>
                         {meal.Meals.map((mealConsumed) => (
+                            //search db for this meal id.
                             <div className= {"mealsConsumed-norm mealsConsumed-preview"} >
                                 <h4>{mealConsumed.name}</h4>
-                                <p>{mealConsumed.calories} calories</p>
+                                <p>{mealConsumed.Calories} calories</p>
                             </div>
                             ))}
                     </Link>
