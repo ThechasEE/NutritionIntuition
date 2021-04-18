@@ -31,7 +31,8 @@ app.post('/api/register', async (req, res, next) =>
             const result = await db.collection('Users').insertOne({Login:login, Email:email, Password:password, FirstName:firstName, LastName:lastName, CalorieGoal:calorieGoal, Age:age, Weight:weight, GoalWeight:goalWeight, Height:height, Gender:gender, IsVerified:isVerified});
             id = result.insertedId;
 			
-			const verifyToken = jwt2.sign({id}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
+			userId = id;
+			const verifyToken = jwt2.sign({userId}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
 			
 			const msg = {
 				to: email, // Change to your recipient
@@ -848,9 +849,10 @@ app.post('/api/register', async (req, res, next) =>
 
         dat.setHours(0,0,0,0);
         var tomorrow = new Date(dat);
+	dat.setHours(1,0,0,0);
         tomorrow.setDate(tomorrow.getDate() + 1);
         tomorrow.setHours(0,0,0,0);
-        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat), "$lte": new Date(tomorrow)}}).toArray();
+        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat), "$lt": new Date(tomorrow)}}).toArray();
         const newmealtime = {UserId:userId, Date: new Date(dat), totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:info1};
         
         if (check1.length > 0)
@@ -967,9 +969,10 @@ app.post('/api/register', async (req, res, next) =>
         
         dat.setHours(0,0,0,0);
         var tomorrow = new Date(dat);
+	dat.setHours(1,0,0,0);
         tomorrow.setDate(tomorrow.getDate() + 1);
         tomorrow.setHours(0,0,0,0);
-        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat), "$lte": new Date(tomorrow)}}).toArray();
+        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat), "$lt": new Date(tomorrow)}}).toArray();
         const newmealtime = {UserId:userId, Date: new Date(dat), totalCalCount:totalCal, totalFatCount:totalFat, totalSodiumCount:totalSodium, totalCarbCount:totalCarbs, totalProteinCount:totalProtein, Meals:info1};
         
         if (check1.length > 0)
@@ -1054,7 +1057,7 @@ app.post('/api/register', async (req, res, next) =>
         var day2 = tomorrow.getDate();
         var month2 = tomorrow.getMonth();
         var year2 = tomorrow.getFullYear();
-        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat1), "$lte": new Date(tomorrow)}}).toArray();
+        const check1 = await db.collection('Mealtime').find({"UserId":userId, "Date": {"$gte": new Date(dat1), "$lt": new Date(tomorrow)}}).toArray();
         var dat = Date.now();
         if (check1.length > 0)
         {
@@ -1424,7 +1427,7 @@ app.post('/api/register', async (req, res, next) =>
             Name = results[0].Name;
             ServingSize = results[0].ServingSize;
             Cal = results[0].Calories;
-            Fat = results[0].Fat;
+            Fat = results[0].TotalFat;
             Sodium = results[0].Sodium;
             Carbs = results[0].TotalCarbs;
             Protein = results[0].Protein;
@@ -1742,7 +1745,7 @@ app.post('/api/register', async (req, res, next) =>
 			decode = decodedToken;
 		});
 		
-		userId = decode.id;
+		userId = decode.userId;
 		
 		const db = client.db();  
         const results = await db.collection('Users').updateOne(

@@ -99,11 +99,11 @@ const Navbar = () => {
                     }}>History</Link>
                 </li>
                 <li>
-                    <Link to="/create" style={{
+                    <Link to="/statistics" style={{
                     color: "grey",
                     //change to "Link to" instead of "a href" when you don't
                     //want to talk to the server
-                }}>View Statistics</Link></li>
+                }}>Statistics</Link></li>
 
                 <li><button type="button" onClick={doLogout} id="logoutButton"
                         style={{

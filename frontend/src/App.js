@@ -6,6 +6,7 @@ import './Shared.css';
 import LoginRegisterPage from './pages/LoginRegisterPage';
 import Dashboard from "./components/dashboard";
 import AddMeal from "./components/AddMeal";
+import Statistics from "./components/Statistics";
 
 function App()
 {
@@ -23,6 +24,9 @@ function App()
                         </Route>
                         <Route path="/addmeal/:todayMealExists" exact>
                             <AddMeal />
+                        </Route>
+                        <Route path="/statistics" exact>
+                            <Statistics />
                         </Route>
                         <Redirect to="/" />
                     </Switch>  
