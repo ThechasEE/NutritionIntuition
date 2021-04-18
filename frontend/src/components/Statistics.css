@@ -6,7 +6,7 @@
 
 .statistics-grid
 {
-    height: 80vh;
+    height: 50vh;
     display: grid;
     grid-template-columns: 30% 70%;
 }
@@ -26,9 +26,14 @@
 .statistics-content
 {
     padding: 25px 25px 0px 25px;
-    font-size: 75px;
+    font-size: 50px;
     color: green;
     text-decoration: underline;
+}
+
+.graph-padding
+{
+    padding: 50px;
 }
 
 .statistics-header
@@ -36,4 +41,20 @@
     margin-top: 30px;
     font-size: 30px;
     font-weight: bold;
+}
+
+.statistics-green
+{
+    color: green;
+}
+
+.statistics-red
+{
+    color: red;
+}
+
+.statistics-bar-text
+{
+    padding: 0px 10px 20px 10px;
+    font-size: 20px;
 }
