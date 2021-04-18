@@ -17,6 +17,7 @@
         "express": "^4.17.1",
         "jsonwebtoken": "^8.5.1",
         "md5": "^2.3.0",
-        "mongodb": "^3.6.6"
+        "mongodb": "^3.6.6",
+        "react-minimal-pie-chart": "^8.2.0"
     }
 }

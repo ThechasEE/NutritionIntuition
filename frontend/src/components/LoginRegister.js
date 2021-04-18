@@ -36,6 +36,15 @@ function LoginRegister()
     const bp = require("./bp.js");
     const storage = require("../tokenStorage.js");
     const md5 = require("md5");
+    const jwt = require("jsonwebtoken");
+    const tok = storage.retrieveToken();
+    const ud = jwt.decode(tok, {complete:true});
+    
+    // If a JWT already exists, direct user to dashboard.
+    if (ud != null)
+    {
+        window.location.href = "/dashboard";
+    }
 
     // Event handlers.
     const [loginMessage, setLoginMessage] = useState("");
@@ -136,7 +145,10 @@ function LoginRegister()
             
             if (responseObj.error !== "")
             {
-                setLoginMessage(responseObj.error)
+                if (responseObj.error === "User is not verified.")
+                    setLoginMessage(responseObj.error + " Email verification resent.");
+                else
+                    setLoginMessage(responseObj.error);
                 return false;
             }
 

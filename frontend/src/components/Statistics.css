@@ -1,0 +1,30 @@
+.statistics-container
+{
+    width: 80%;
+    margin: auto;
+}
+
+.statistics-grid
+{
+    display: flex;
+	flex-direction: row;
+}
+
+.statistics-graph
+{
+    width: 800px;
+    margin: 50px;
+}
+
+.statistics-error
+{
+    padding-top: 10px;
+    color:red;
+}
+
+.statistics-header
+{
+    margin-top: 30px;
+    font-size: 30px;
+    font-weight: bold;
+}
