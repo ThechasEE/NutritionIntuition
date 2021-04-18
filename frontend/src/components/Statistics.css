@@ -6,20 +6,29 @@
 
 .statistics-grid
 {
-    display: flex;
-	flex-direction: row;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: 30% 70%;
 }
 
 .statistics-graph
 {
-    width: 800px;
     margin: 50px;
 }
 
 .statistics-error
 {
-    padding-top: 10px;
+    padding: 10px;
+    font-size: 25px;
     color:red;
+}
+
+.statistics-content
+{
+    padding: 25px 25px 0px 25px;
+    font-size: 75px;
+    color: green;
+    text-decoration: underline;
 }
 
 .statistics-header
