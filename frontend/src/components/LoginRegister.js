@@ -35,7 +35,7 @@ function LoginRegister()
 {
     const bp = require("./bp.js");
     const storage = require("../tokenStorage.js");
-    //const bcrypt = require('bcrypt');
+    const md5 = require("md5");
 
     // Event handlers.
     const [loginMessage, setLoginMessage] = useState("");
@@ -125,7 +125,7 @@ function LoginRegister()
         // Login object to send.
         var obj = {
             login: Variables.loginVars.username.value,
-            password: Variables.loginVars.password.value
+            password: md5(Variables.loginVars.password.value)
         };
         var json = JSON.stringify(obj);
 
@@ -190,7 +190,7 @@ function LoginRegister()
         // Registration object to send.
         var obj = {
             login: Variables.emailVars.login.value,
-            newPassword: Variables.emailVars.newPassword.value,
+            newPassword: md5(Variables.emailVars.newPassword.value),
         };
         var json = JSON.stringify(obj);
 
@@ -381,7 +381,7 @@ function LoginRegister()
         var obj = {
             login: Variables.registerVars.username.value,
             email: Variables.registerVars.email.value,
-            password: Variables.registerVars.password.value,
+            password: md5(Variables.registerVars.password.value),
             firstName: Variables.registerVars.firstName.value,
             lastName: Variables.registerVars.lastName.value,
             age: Number(Variables.registerVars.age.value),

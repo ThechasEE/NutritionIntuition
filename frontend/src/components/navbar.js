@@ -64,8 +64,10 @@ const Navbar = () => {
     const doLogout = event =>
     {
         event.preventDefault();
-        alert('doLogout');
+        localStorage.clear();
+        window.location.href = "/login";
     };
+
     return (
         <nav className="navbar">
             <h1>Nutrition Intuition</h1>
