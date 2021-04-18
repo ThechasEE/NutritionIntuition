@@ -12,6 +12,7 @@
 - sudo npm install cors
 - sudo npm install --save @sendgrid/mail
 - **NEW:** sudo npm install md5
+- **NEW:** sudo npm install react-minimal-pie-chart
 
 ### Inside frontend directory:
 - sudo npm install react-router-dom
