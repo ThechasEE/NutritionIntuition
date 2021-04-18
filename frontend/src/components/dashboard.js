@@ -52,7 +52,7 @@ const Dashboard = () => {
                 return res.json();
             })
                 .then(data => {
-                    if (data.error === '') {
+                    if ( data.id === -1) {
                         setTodayMealExists(false)
                     } else {
                         //date already exists,

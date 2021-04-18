@@ -138,7 +138,7 @@ const MealManagementComponent = () => {
         useEffect(() => {
             searchMealTimeById(mealTimeId);
             console.log(mealTimeObj)
-        }, [mealTimeObj])
+        }, [])
     }
 
     const TestReturnThingy = () => {

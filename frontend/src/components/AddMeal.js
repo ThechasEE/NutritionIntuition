@@ -44,40 +44,53 @@ const CreateMeal = () => {
     const history = useHistory();
     const [todayMealExists, setTodayMealExists] = useState(false);
 
-    const checkIfMealExistForToday = (e) => {
-        //prevents page inputs from being refreshed
-        //create a meal
-        const requestObj = {
+    const checkIfMealExistsToday = () => {
+        //collect data for components
+        var obj = {
             userId: userId,
-            tok: tok
+            jwtToken: tok
         }
 
         setIsPending(true);
 
-        //TODO change to get most research and not search
-        const response = fetch(bp.buildPath("api/searchmealtime"), {
+        fetch(bp.buildPath("api/mealtimecheck"), {
             method: 'POST',
             //we are sending json data
             headers: {"Content-Type": "application/json"},
             //actual data we are sending with this request
-            body: JSON.stringify(requestObj)
-        }).then(() => {
-            //add error checking for duplicate meal
-            setIsPending(false);
+            body: JSON.stringify(obj)
+        }).then(res => {
+            if (!res.ok) {
+                throw Error('could not fetch the data from that resource');
+                //is thrown to our catch below
+            }
+            //resolution of the promise
+            return res.json();
         })
-        if(response.text != null) {
-            setTodayMealExists(true);
-        }else{
-            setTodayMealExists(false);
-        }
+            .then(data => {
+                if (data.id === -1) {
+                    setTodayMealExists(false)
+                } else {
+                    //date already exists,
+                    setTodayMealExists(true)
+                    console.log(data.error);
+                    //console.log("The meal Id we found is: " +  data.id)
+                    //setMealId(null)
+                }//store the meal data
+
+                setIsPending(false);
+                setError(null);
+            })
+            .catch((err) => {
+                //check for our abort check
+                setIsPending(false);
+                setError(err.message);
+
+            })
     }
-
-
-
-
     function LoadToday(){
         useEffect(() => {
-            checkIfMealExistForToday();
+            checkIfMealExistsToday();
         }, [todayMealExists])
     }
 
@@ -247,6 +260,7 @@ const CreateMeal = () => {
                     //setMealId(data.id);
                     mealId = data.id;
                     console.log("Added meal: " + mealId);
+                    return data.id;
 
                 }
                 else{
@@ -367,8 +381,8 @@ const CreateMeal = () => {
         //SearchMealByNameClosetMatch();
         //do this anyways. the response will let us know what to do
         let mealtimeId = '';
-
         let mealId = CreateANewMeal();
+        console.log(mealId)
         //console.log(mealId)
         //now we have the meal Id, or null
         if(mealId !== ''){
@@ -380,6 +394,7 @@ const CreateMeal = () => {
                 //create today's datetime object and add in our meal.
                 mealtimeId = CreateMealDay();
             }
+            console.log(mealtimeId)
             //add meal to the date
             AddMealToDay(mealtimeId, mealId);
 
