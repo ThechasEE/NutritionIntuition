@@ -103,7 +103,7 @@ const MealManagementComponent = () => {
             return res.json();
         })
             .then(data => {
-                if (data.error === '') {
+                if (data.id === -1) {
                     setTodayMealExists(false)
                     setMealTimeId(data.id)
                     return data.id
@@ -130,24 +130,35 @@ const MealManagementComponent = () => {
     function LoadToday(){
         useEffect(() => {
             checkIfMealExistsToday();
-            console.log(mealTimeId)
-        }, [todayMealExists, mealTimeId])
+            console.log("Addmealday, load today: " + mealTimeId)
+        }, [todayMealExists])
     }
 
     function LoadTodaysMeal(){
         useEffect(() => {
             searchMealTimeById(mealTimeId);
             console.log(mealTimeObj)
-        }, [todayMealExists, mealTimeId])
+        }, [mealTimeObj])
     }
 
-    function LoadTodaysMeal2(){
-        useEffect(() => {
-            searchMealTimeById(mealTimeId);
-            console.log(mealTimeObj)
-        }, [])
+    const TestReturnThingy = () => {
+        if(todayMealExists) {
+            return (
+                <div>
+                    <h3>Total calories: {mealTimeObj && mealTimeObj.totalCal}</h3>
+                    <p>Total Fat: {mealTimeObj.totalFat}g</p>
+                    <p>Total Sodium: {mealTimeObj.totalCarbs}g</p>
+                    <p>Total Carbs: {mealTimeObj.totalProtein}g</p>
+                    <p>Total Protein: {mealTimeObj.totalSodium}g</p>
+                </div>);
+        }else{
+            return(
+            <h3>No meals added so far today.</h3>
+            );
+        }
     }
-    LoadToday();
+
+    //LoadToday();
 
 
 
@@ -158,14 +169,12 @@ const MealManagementComponent = () => {
             <h1>Hello, {firstName}</h1>
             {LoadToday()}
             {LoadTodaysMeal()}
-            {LoadTodaysMeal2()}
             <h2>{mealTimeObj.date}</h2>
-            <p>Total Fat: {mealTimeObj.totalFat}g</p>
-            <p>Total Sodium: {mealTimeObj.totalCarbs}g</p>
-            <p>Total Carbs: {mealTimeObj.totalProtein}g</p>
-            <p>Total Protein: {mealTimeObj.totalSodium}g</p>
-            <h3>Total calories: {mealTimeObj && mealTimeObj.totalCal}</h3>
+            <p>Welcome back!</p>
+            {TestReturnThingy()}
 
+
+            <br/>
             <div className="links">
                 <Link to={{
                         pathname: '/addMeal/' + todayMealExists,

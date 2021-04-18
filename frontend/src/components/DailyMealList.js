@@ -49,6 +49,7 @@ const DailyMealList = ({data: title, range}) => {
                 }
                 else{
                     mealReturn = null;
+                    console.log("no meal history.")
                 }//store the meal data
 
                 setIsPending(false);
@@ -58,6 +59,7 @@ const DailyMealList = ({data: title, range}) => {
                 //check for our abort check
                 setIsPending(false);
                 setError(err.message);
+                console.log("no meal history.")
 
             })
 

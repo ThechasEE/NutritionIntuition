@@ -3,6 +3,7 @@ import {useHistory, useParams} from 'react-router-dom';
 import bp from "./bp";
 import {Link} from "react-router-dom";
 import FetchData from "./fetchComponent";
+import addMealDay from "./addMealDay";
 
 const CreateMeal = () => {
     //token
@@ -30,11 +31,11 @@ const CreateMeal = () => {
     const [error,setError] = useState(null);
 
     //variables
-    const [mealId, setMealId] = useState('');
-    let mealId2;
-    let mealtimeId2;
-    let mealtimeToken2;
-    const [mealtimeId, setmealtimeId] = useState('');
+    //const [mealId, setMealId] = useState('');
+    //let mealId2;
+    //let mealtimeId2;
+    //let mealtimeToken2;
+    //const [mealtimeId, setmealtimeId] = useState('');
     const [amountConsumed, setamountConsumed] = useState('');
     const [meal, setMeal] = useState('');
     const [mealsArray, setMealsArray] = useState('');
@@ -87,8 +88,8 @@ const CreateMeal = () => {
 
 
 
-
-    const AddMealToDay = (e) =>{
+        //todo implement this and make sure it works
+    const AddMealToDay = (mealtimeId, mealId) =>{
         console.log("adding meal to day");
         //prevents page inputs from being refreshed
         //e.preventDefault();
@@ -149,20 +150,16 @@ const CreateMeal = () => {
     //
     // //done create day if first meal of the day.
     const CreateMealDay = () => {
-        console.log("creating day");
+        let mealtimeId = '';
+        //console.log("creating day");
+        //console.log(mealId2)
         //prevents page inputs from being refreshed
         //e.preventDefault();
         //create our first meal that will help construct today's
         //meal date.
         const firstMeal = {
             userId: userId,
-            info: [
-                {
-                    mealId: mealId2,
-                    //change to increment amount consumed
-                    amountConsumed: 1
-                }
-            ],
+            info: [ ],
             jwtToken: tok
         };
         setIsPending(true);
@@ -183,16 +180,9 @@ const CreateMeal = () => {
         })
             .then(data => {
                 if(data.error === '') {
-                    setmealtimeId(data.id)
-                    mealtimeId2 = data.id;
-                    setMealtimeToken(data.accessToken)
-                    mealtimeToken2 = data.accessToken
+                    mealtimeId = data.id;
                     //setMealExists(true)
                     console.log("Added mealtime: " + mealtimeId);
-                    console.log("Added mealtime: " + mealtimeId2);
-                    console.log("Meal Time Object: " + mealtimeToken)
-                    console.log("Meal Time Object: " + mealtimeToken2)
-
                 }
                 else{
                     //date already exists,
@@ -211,13 +201,14 @@ const CreateMeal = () => {
                 setError(err.message);
 
             })
-
+        return mealtimeId;
     }
 
 
     // Functional
     // Creates our mealtime object.
     const CreateANewMeal = () => {
+        let mealId = '';
         console.log("creating a new meal");
         //prevents page inputs from being refreshed
         //e.preventDefault();
@@ -252,17 +243,18 @@ const CreateMeal = () => {
         })
             .then(data => {
                 if(data.error === '') {
-                    setMeal(data);
-                    setMealId(data.id);
-                    mealId2 = data.id;
-                    console.log("Added meal: " + mealId2);
+                    //setMeal(data);
+                    //setMealId(data.id);
+                    mealId = data.id;
+                    console.log("Added meal: " + mealId);
 
                 }
                 else{
                     //TODO display to user this meal already exists.
                     console.log(data.error);
-                    console.log("The meal Id we found is: " +  data.id);
-                    setMealId(null);
+                    //console.log("The meal Id we found is: " +  data.id);
+                    //setMealId(null);
+                    mealId = '';
                 }//store the meal data
 
                 setIsPending(false);
@@ -275,7 +267,7 @@ const CreateMeal = () => {
 
             })
 
-
+        return mealId;
     }
 
     // //Functional
@@ -367,7 +359,6 @@ const CreateMeal = () => {
     //first step
     const AddMeal = (e) => {
 
-
         console.log("adding meal: " + name);
         //prevents page inputs from being refreshed
         e.preventDefault();
@@ -375,22 +366,22 @@ const CreateMeal = () => {
         //console.log(mealId)
         //SearchMealByNameClosetMatch();
         //do this anyways. the response will let us know what to do
+        let mealtimeId = '';
 
-        CreateANewMeal();
+        let mealId = CreateANewMeal();
         //console.log(mealId)
         //now we have the meal Id, or null
-        if(mealId != null){
+        if(mealId !== ''){
             //TODO we have to add it to the date
             console.log("meal is here")
             console.log("todayMeal Exists:" + todayMealExists)
             if(todayMealExists === false){
                 console.log("create day?")
                 //create today's datetime object and add in our meal.
-                CreateMealDay();
-            }else{
-                console.log("dont create day?")
-                //simply append to existing day.
+                mealtimeId = CreateMealDay();
             }
+            //add meal to the date
+            AddMealToDay(mealtimeId, mealId);
 
         }else{
             //TODO we message the user and make the name text box red
