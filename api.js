@@ -31,7 +31,8 @@ app.post('/api/register', async (req, res, next) =>
             const result = await db.collection('Users').insertOne({Login:login, Email:email, Password:password, FirstName:firstName, LastName:lastName, CalorieGoal:calorieGoal, Age:age, Weight:weight, GoalWeight:goalWeight, Height:height, Gender:gender, IsVerified:isVerified});
             id = result.insertedId;
 			
-			const verifyToken = jwt2.sign({id}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
+			userId = id;
+			const verifyToken = jwt2.sign({userId}, process.env.JWT_ACC_ACTIVATE, {expiresIn: '20m'});
 			
 			const msg = {
 				to: email, // Change to your recipient
@@ -1742,7 +1743,7 @@ app.post('/api/register', async (req, res, next) =>
 			decode = decodedToken;
 		});
 		
-		userId = decode.id;
+		userId = decode.userId;
 		
 		const db = client.db();  
         const results = await db.collection('Users').updateOne(
