@@ -200,12 +200,12 @@ const CreateMeal = () => {
         var meal = {
             userId: userId,
             name: name,
-            calories: parseInt(calories),
+            calories: calories,
             servingSize: servingSize,
-            totalFat: parseInt(totalFat),
-            sodium: parseInt(sodium),
-            totalCarbs: parseInt(totalCarbs),
-            protein: parseInt(protein),
+            totalFat: totalFat,
+            sodium: sodium,
+            totalCarbs: totalCarbs,
+            protein: protein,
             jwtToken: tok
         };
 

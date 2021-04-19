@@ -95,7 +95,6 @@ const DailyMealList = ({data: title, range}) => {
                 //setMeals(data.results)
                 console.log(data.results);
                 setMeals(data.results);
-                console.log("mEALS:" + meals);
                 }
                 else{
                     setMeals('');
@@ -144,7 +143,7 @@ const DailyMealList = ({data: title, range}) => {
                             //search db for this meal id.
                             <div className= {"mealsConsumed-norm mealsConsumed-preview"} >
                                 <h4>{mealConsumed.name}</h4>
-                                <p>{mealConsumed.Calories} calories</p>
+                                <p>{mealConsumed.amountConsumed} calories</p>
                             </div>
                             ))}
                     </Link>
