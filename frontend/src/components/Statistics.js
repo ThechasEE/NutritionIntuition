@@ -113,7 +113,7 @@ function Statistics()
             // Store responses.
             meals = responseSMUObj.results;
             range = responseSMTObj.results;
-            Graph.mealVars.calorieGoal = parseInt(responseUserObj.calorieGoal);
+            Graph.mealVars.calorieGoal = parseFloat(responseUserObj.calorieGoal);
         }
         catch(e)
         {
@@ -127,12 +127,12 @@ function Statistics()
         if (meals != null)
         {
             meals.forEach(element => {
-                Graph.mealVars.calories += parseInt(element.Calories);
-                Graph.mealVars.fat += parseInt(element.TotalFat);
-                Graph.mealVars.sodium += parseInt(element.Sodium);
-                Graph.mealVars.carbs += parseInt(element.TotalCarbs);
-                Graph.mealVars.protein += parseInt(element.Protein);
-                Graph.mealVars.total += (parseInt(element.TotalFat) + parseInt(element.TotalCarbs) + parseInt(element.Protein) + (parseInt(element.Sodium) / 1000)); // Sodium divided by 1000 to get grams.
+                Graph.mealVars.calories += parseFloat(element.Calories);
+                Graph.mealVars.fat += parseFloat(element.TotalFat);
+                Graph.mealVars.sodium += parseFloat(element.Sodium);
+                Graph.mealVars.carbs += parseFloat(element.TotalCarbs);
+                Graph.mealVars.protein += parseFloat(element.Protein);
+                Graph.mealVars.total += (parseFloat(element.TotalFat) + parseFloat(element.TotalCarbs) + parseFloat(element.Protein) + (parseFloat(element.Sodium) / 1000)); // Sodium divided by 1000 to get grams.
                 Graph.mealVars.numMeals += 1;
             });
 

@@ -7,6 +7,7 @@ import LoginRegisterPage from './pages/LoginRegisterPage';
 import Dashboard from "./components/dashboard";
 import AddMeal from "./components/AddMeal";
 import Statistics from "./components/Statistics";
+import Profile from "./components/Profile";
 import HistoryPage from "./components/historyPage";
 
 function App()
@@ -28,6 +29,9 @@ function App()
                         </Route>
                         <Route path="/statistics" exact>
                             <Statistics />
+                        </Route>
+                        <Route path="/profile" exact>
+                            <Profile />
                         </Route>
                         <Route path="/history" exact>
                             <HistoryPage />
