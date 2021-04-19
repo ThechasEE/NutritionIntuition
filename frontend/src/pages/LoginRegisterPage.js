@@ -9,7 +9,7 @@ const LoginRegisterPage = () =>
 {
     return(
         <div id="body">
-            <section className='container'>
+            <section className='login-register-container'>
                 <LoginRegister />
             </section>
 
