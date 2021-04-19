@@ -82,7 +82,7 @@ const Dashboard = () => {
             }, [todayMealExists])
         }
         LoadToday();
-        console.log("Today exists: " + todayMealExists);
+        //console.log("Today exists: " + todayMealExists);
 
         return (
             <div className="App">
