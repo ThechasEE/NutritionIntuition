@@ -130,20 +130,24 @@ const DailyMealList = ({data: title, range}) => {
                     {/*template string ` ` allows variables (JS) using $*/}
                     <Link to={`/meals/${meal.id}`}>
                         <h2>{meal.date}</h2>
-                        <img src={"https://media.tenor.com/images/851291ba1b6c8094b74169b70691c72f/tenor.gif"} width={200} height={200}></img>
                         <h3>Total calories: {meal.totalCalCount}</h3>
                         <p>Total Fat: {meal.totalFatCount}g</p>
                         <p>Total Sodium: {meal.totalSodiumCount}g</p>
                         <p>Total Carbs: {meal.totalCarbCount}g</p>
                         <p>Total Protein: {meal.totalProteinCount}g</p>
+                        {console.log(meal)}
                         {/* now we cycle through the meals this day*/}
                         <br></br>
                         <h2>Meals Eaten:</h2>
                         {meal.Meals.map((mealConsumed) => (
                             //search db for this meal id.
                             <div className= {"mealsConsumed-norm mealsConsumed-preview"} >
-                                <h4>{mealConsumed.name}</h4>
-                                <p>{mealConsumed.amountConsumed} calories</p>
+                                {console.log(mealConsumed)}
+                                <h4>{mealConsumed.Name}</h4>
+                                <p>{mealConsumed.Calories} calories</p>
+                                <p>{mealConsumed.Protein}g Protein</p>
+                                <p>{mealConsumed.TotalFat}g Fat</p>
+                                <p>{mealConsumed.TotalCarbs}g Carbs</p>
                             </div>
                             ))}
                     </Link>

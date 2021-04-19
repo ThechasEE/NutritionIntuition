@@ -70,7 +70,18 @@ const Navbar = () => {
 
     return (
         <nav className="navbar">
-            <h1>Nutrition Intuition</h1>
+            <h2>
+            <li>
+                <Link to={{
+                    pathname: '/dashboard',
+                }}
+                      style={{
+                          color: "green",
+                          borderRadius: '12px'
+                      }}
+                >Nutrition Intuition</Link>
+            </li>
+            </h2>
             <div className="links">
 
             </div>
@@ -79,10 +90,7 @@ const Navbar = () => {
             <div className="links">
                 <li>
                     <Link to={{
-                        pathname: '/addMeal/' + todayMealExists,
-                        state: {
-                            todayMealExists: todayMealExists,
-                        },
+                        pathname: '/addMeal',
                     }}
                           style={{
                               color: "gray",

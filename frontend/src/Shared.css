@@ -11,7 +11,6 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
 * {
-
     margin: 0;
 
     font-family: "Quicksand";
@@ -36,18 +35,19 @@
 }
 /* Meal LIST */
 
-.meal-preview {
-    margin-left: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background-color: var(--dark-blue);
-    display: inline-block;
-    inline-size: 300px;
-    border-radius: 25px;
+.meal-preview{
+    margin-left:20px;
+    margin-top:20px;
+    margin-bottom:20px;
+    background-color:var(--dark-blue);
+    display:inline-block;
+    inline-size:300px;
+    border-radius:25px;
     padding:10px 16px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #fafafa;
-
+    padding-bottom:20px;
+    border-bottom:1px solid#fafafa;
+    overflow: auto;
+    scroll-behaviour: smooth;
 }
 
 .mealsConsumed-norm {
@@ -85,7 +85,7 @@
     box-shadow: 1px 3px 5px rgba(0,0,0,0.1);
 }
 .meal-preview h2 {
-    font-size: 20px;
+    font-size: 100%;
     color: green;
     margin-bottom: 8px;
 }
@@ -260,4 +260,67 @@
     border-radius: 12px;
     padding: 10px;
 
+}
+
+.container {
+    display: flex;
+}
+.container > div {
+    flex: 1; /*grow*/
+}
+
+.first-div {
+    width: auto;
+    min-width: 33%;
+    max-width: 33%;
+    min-height: 800px;
+    float:left;
+}
+
+.second-div {
+    min-width: 33%;
+    width: auto;
+    max-width: 33%;
+    min-height: 800px;
+    float:left;
+}
+
+.third-div {
+    min-width: 33%;
+    min-height: 800px;
+
+    max-width: 33%;
+    width: auto;
+    float:left;
+}
+
+.today-preview{
+    margin-left:20px;
+    margin-top:20px;
+    margin-bottom:20px;
+    display:inline-block;
+    inline-size:300px;
+    border-radius:25px;
+    padding:10px 16px;
+    padding-bottom:20px;
+    border-bottom:1px solid#fafafa;
+    overflow: auto;
+    scroll-behaviour: smooth;
+}
+.today-preview h2 {
+    font-size: 30px;
+    color: green;
+    margin-bottom: 8px;
+}
+
+.today-preview h3 {
+    font-size: 20px;
+    color: darkblue;
+    margin-bottom: 8px;
+}
+.today-preview a{
+    text-decoration: none;
+}
+.today-preview p{
+    color: cornflowerblue;
 }

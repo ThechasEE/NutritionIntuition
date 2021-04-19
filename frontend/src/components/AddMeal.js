@@ -4,6 +4,7 @@ import bp from "./bp";
 import {Link} from "react-router-dom";
 import FetchData from "./fetchComponent";
 import addMealDay from "./addMealDay";
+import Navbar from "./navbar";
 
 class Variables extends React.Component
 {
@@ -360,7 +361,10 @@ const CreateMeal = () => {
 
 
     return (
-        <div className="create">
+        <div>
+            {<Navbar/>}
+            <div className="create">
+
             <h2>Add an existing meal by searching below:</h2>
             <form onSubmit={ AddMeal }>
                 <input
@@ -435,6 +439,7 @@ const CreateMeal = () => {
                 { isPending && <button disabled>Adding new meal...</button>}
 
             </form>
+        </div>
         </div>
     );
 }
