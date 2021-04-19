@@ -792,9 +792,7 @@ Variable name capitalization bug fix
 
         var meals = [];
 
-        for (let i = 0; i < info.length; i++)js
-Variable name capitalization bug fix
-9 hours ago
+        for (let i = 0; i < info.length; i++)
         {
             meals.push(ObjectId(info[i].mealId))
         }
