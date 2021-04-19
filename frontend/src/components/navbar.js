@@ -104,6 +104,12 @@ const Navbar = () => {
                     //change to "Link to" instead of "a href" when you don't
                     //want to talk to the server
                 }}>Statistics</Link></li>
+                <li>
+                    <Link to="/profile" style={{
+                    color: "grey",
+                    //change to "Link to" instead of "a href" when you don't
+                    //want to talk to the server
+                }}>Profile</Link></li>
 
                 <li><button type="button" onClick={doLogout} id="logoutButton"
                         style={{

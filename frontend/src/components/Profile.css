@@ -1,0 +1,7 @@
+.profile-container
+{
+    display: grid;
+    grid-template-columns: 66% 33%;
+    width: 80%;
+    margin: auto;
+}
