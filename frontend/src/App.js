@@ -7,6 +7,7 @@ import LoginRegisterPage from './pages/LoginRegisterPage';
 import Dashboard from "./components/dashboard";
 import AddMeal from "./components/AddMeal";
 import Statistics from "./components/Statistics";
+import HistoryPage from "./components/historyPage";
 
 function App()
 {
@@ -22,11 +23,14 @@ function App()
                         <Route path="/dashboard" exact>
                             <Dashboard />
                         </Route>
-                        <Route path="/addmeal/:todayMealExists" exact>
+                        <Route path="/addmeal" exact>
                             <AddMeal />
                         </Route>
                         <Route path="/statistics" exact>
                             <Statistics />
+                        </Route>
+                        <Route path="/history" exact>
+                            <HistoryPage />
                         </Route>
                         <Redirect to="/" />
                     </Switch>  

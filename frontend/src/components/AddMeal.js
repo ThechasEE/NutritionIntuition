@@ -82,6 +82,7 @@ const CreateMeal = () => {
                 } else {
                     //date already exists,
                     setTodayMealExists(true)
+                    Variables.mealStuff.mealtimeId = data.id;
                     console.log(data.error);
                     //console.log("The meal Id we found is: " +  data.id)
                     //setMealId(null)
@@ -199,12 +200,12 @@ const CreateMeal = () => {
         var meal = {
             userId: userId,
             name: name,
-            calories: calories,
+            calories: parseInt(calories),
             servingSize: servingSize,
-            totalFat: totalFat,
-            sodium: sodium,
-            totalCarbs: totalCarbs,
-            protein: protein,
+            totalFat: parseInt(totalFat),
+            sodium: parseInt(sodium),
+            totalCarbs: parseInt(totalCarbs),
+            protein: parseInt(protein),
             jwtToken: tok
         };
 
@@ -342,9 +343,11 @@ const CreateMeal = () => {
                 console.log("create day?")
                 //create today's datetime object and add in our meal.
                 await CreateMealDay();
+            }else{
+                //todo get the mealtime id
+
             }
             console.log("Our mealtime id is: " + Variables.mealStuff.mealtimeId);
-            //todo add meal to the date
             await AddMealToDay();
 
         } else {

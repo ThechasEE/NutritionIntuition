@@ -166,21 +166,13 @@ const MealManagementComponent = () => {
 
     return (
         <div className="create">
-            <h1>Hello, {firstName}</h1>
             {LoadToday()}
             {LoadTodaysMeal()}
-            <h2>{mealTimeObj.date}</h2>
-            <p>Welcome back!</p>
-            {TestReturnThingy()}
-
-
             <br/>
             <div className="links">
                 <Link to={{
-                        pathname: '/addMeal/' + todayMealExists,
-                        state: {
-                            todayMealExists: todayMealExists,
-                        },
+                        pathname: '/addMeal',
+
                     }}
                       style={{
                           color: "white",
@@ -189,6 +181,7 @@ const MealManagementComponent = () => {
                       }}
                     >Add new Meal</Link>
             </div>
+            {history.push('/dashboard')}
         </div>
     );
 }
