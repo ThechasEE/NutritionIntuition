@@ -163,6 +163,7 @@ app.post('/api/register', async (req, res, next) =>
 
     var error = '';
     var id = -1;
+    var login = '';
     var firstName = '';
     var lastName = '';
     var age = '';
@@ -186,6 +187,7 @@ app.post('/api/register', async (req, res, next) =>
     if( results.length > 0 )  
     {   
         id = 1;
+	login = results[0].Login;
         firstName = results[0].FirstName;
         lastName = results[0].LastName;
         age = results[0].Age;
@@ -205,7 +207,7 @@ app.post('/api/register', async (req, res, next) =>
         return;
     }
     var refreshedToken = jwt.refresh(jwtToken);
-    var ret = { id:id, firstName:firstName, lastName:lastName, age:age, weight:weight, goalWeight:goalWeight, calorieGoal:calorieGoal, height:height, gender:gender, token:refreshedToken, error:error};  
+    var ret = { id:id, login:login, firstName:firstName, lastName:lastName, age:age, weight:weight, goalWeight:goalWeight, calorieGoal:calorieGoal, height:height, gender:gender, token:refreshedToken, error:error};  
     res.status(200).json(ret);
 });
 
