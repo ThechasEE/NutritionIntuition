@@ -95,7 +95,6 @@ const DailyMealList = ({data: title, range}) => {
                 //setMeals(data.results)
                 console.log(data.results);
                 setMeals(data.results);
-                console.log("mEALS:" + meals);
                 }
                 else{
                     setMeals('');
@@ -125,22 +124,7 @@ const DailyMealList = ({data: title, range}) => {
     return(
         <div className="meal-list">
             {/*Todo add a form to update date*/}
-            <h2>{title}</h2>
-            <form onSubmit={ getMealHistory }>
-                <label>Input how many days you wish to see:</label>
-                <br/>
-                <input
-                    type="text"
-                    required
-                    value={localRange}
-                    //allows us to get the html data and save it in our title
-                    onChange={(e) => setLocalRange(e.target.value)}
-                />
 
-                { !isPending && <button>Submit</button>}
-                { isPending && <button disabled>Submitting...</button>}
-            </form>
-            {console.log(meals)}
             {meals && meals.map((meal) => (
                 <div className="meal-preview" key={meal.id}>
                     {/*template string ` ` allows variables (JS) using $*/}
@@ -159,7 +143,7 @@ const DailyMealList = ({data: title, range}) => {
                             //search db for this meal id.
                             <div className= {"mealsConsumed-norm mealsConsumed-preview"} >
                                 <h4>{mealConsumed.name}</h4>
-                                <p>{mealConsumed.Calories} calories</p>
+                                <p>{mealConsumed.amountConsumed} calories</p>
                             </div>
                             ))}
                     </Link>

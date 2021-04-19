@@ -16,6 +16,7 @@ const Dashboard = () => {
     const [error, setError] = useState(null);
     const [isPending, setIsPending] = useState(false);
     const [todayMealExists, setTodayMealExists] = useState(false);
+    const firstName = ud.payload.firstName;
 
     if (ud != null) {
         const userId = ud.payload.userId;
@@ -89,14 +90,13 @@ const Dashboard = () => {
                 {<Navbar/>}
                 <div className="dashboard">
                     WIP
-                    {/*error && <div> {error} </div>}
-                {isPending && <div>Loading...</div>*/}
-                    <MealManagementComponent/>
+                    <h1>Hello, {firstName}</h1>
+                    <h2>Here are today's stats.</h2>
+
 
                     {todayMealExists &&
-                    <DailyMealList title="Meals Test" range={7}/>}
-                    {/*<DailyMealList meals={meals} title="Meals Test" range={7}/>}*/}
-                    {/*<CreateMeal/>*/}
+                    <DailyMealList title="Meals Test" range={1}/>}
+                    <MealManagementComponent/>
 
                 </div>
             </div>

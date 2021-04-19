@@ -8,6 +8,7 @@ import Dashboard from "./components/dashboard";
 import AddMeal from "./components/AddMeal";
 import Statistics from "./components/Statistics";
 import Profile from "./components/Profile";
+import HistoryPage from "./components/historyPage";
 
 function App()
 {
@@ -23,7 +24,7 @@ function App()
                         <Route path="/dashboard" exact>
                             <Dashboard />
                         </Route>
-                        <Route path="/addmeal/:todayMealExists" exact>
+                        <Route path="/addmeal" exact>
                             <AddMeal />
                         </Route>
                         <Route path="/statistics" exact>
@@ -31,6 +32,9 @@ function App()
                         </Route>
                         <Route path="/profile" exact>
                             <Profile />
+                        </Route>
+                        <Route path="/history" exact>
+                            <HistoryPage />
                         </Route>
                         <Redirect to="/" />
                     </Switch>  

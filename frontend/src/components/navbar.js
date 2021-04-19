@@ -92,7 +92,7 @@ const Navbar = () => {
                 </li>
 
                 <li>
-                    <Link to="/create" style={{
+                    <Link to="/history" style={{
                         color: "grey",
                         //change to "Link to" instead of "a href" when you don't
                         //want to talk to the server
