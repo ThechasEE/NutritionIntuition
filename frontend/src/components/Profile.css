@@ -1,7 +1,81 @@
+.profile-contraint
+{
+    width: 80%;
+    margin: auto;
+}
+
+.profile-dropdown
+{
+    text-align-last: center;
+	color: rgba(0,0,0,0.65);
+	font-size: 20px;
+	padding: 12px;
+	margin: 12px 0px;
+	border-radius: 5px;
+	background-color: var(--off-white);
+	border: 0px solid var(--dark-blue);
+}
+
 .profile-container
 {
     display: grid;
     grid-template-columns: 66% 33%;
-    width: 80%;
-    margin: auto;
+}
+
+.profile-flex
+{
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-update
+{
+    display: grid;
+    grid-template-columns: 50% 50%;
+    justify-items: center;
+}
+
+.profile-title
+{
+    padding: 25px 25px 25px 25px;
+    font-size: 50px;
+    color: green;
+    text-decoration: underline;
+}
+
+.profile-input-constraint
+{
+    width: 350px;
+}
+
+.profile-select-constraint
+{
+    max-width: 500px;
+}
+
+.profile-text
+{
+    font-weight: bold;
+    padding-top: 10px;
+}
+
+.profile-title-error
+{
+    padding-bottom: 10px;
+    color: red;
+    font-size: 20px;
+}
+
+.profile-text-error
+{
+    padding: 10px;
+    color: red;
+    font-size: 20px;
+}
+
+.profile-password-header
+{
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: underline;
 }

@@ -364,8 +364,18 @@ function LoginRegister()
             return false;
         }
 
+        // Assign the calorie goal.
+        if (Variables.registerVars.calorieGoal !== null)
+        {
+            if (Variables.registerVars.gender.value !== "Female")
+                Variables.registerVars.calorieGoal.value = (Number(Variables.registerVars.weight.value) * 1.1) * 12;
+            else
+                Variables.registerVars.calorieGoal.value = Number(Variables.registerVars.weight.value) * 12;
+        }
+
         // No errors reported.
         setForm("RegisterGoal");
+
         return false;
     }
 
@@ -486,6 +496,7 @@ function LoginRegister()
         <form className="login-register-form">
             <img className="image" src={logo} alt="Not found"/>
             <div className="register-header">Register: Step 3</div>
+            <div className="register-black-text">Calorie goal reccomended based on your profile:</div>
             <input className="input" type="number" placeholder="Calorie Goal" ref={(c) => (c !== null) ? Variables.registerVars.calorieGoal = c : null} defaultValue={Variables.registerVars.calorieGoal === null ? "" : Variables.registerVars.calorieGoal.value}/>
             <input className="input" type="number" placeholder="Weight Goal" ref={(c) => (c !== null) ? Variables.registerVars.weightGoal = c : null} defaultValue={Variables.registerVars.weightGoal === null ? "" : Variables.registerVars.weightGoal.value}/>
             <button className="login-register-button-big" type="submit" onClick={doRegisterGoal}>Finalize Registration</button>

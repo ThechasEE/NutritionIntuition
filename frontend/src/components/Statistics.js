@@ -110,8 +110,6 @@ function Statistics()
                 }
             }
 
-            console.log(responseSMTObj);
-
             // Store responses.
             meals = responseSMUObj.results;
             range = responseSMTObj.results;
