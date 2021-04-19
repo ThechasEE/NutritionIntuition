@@ -16,7 +16,7 @@ video
     z-index: -1;
 }
 
-.container
+.login-register-container
 {
     display: flex;
     flex-direction: column;
