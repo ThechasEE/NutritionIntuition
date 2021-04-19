@@ -763,7 +763,9 @@ app.post('/api/register', async (req, res, next) =>
             error = "Mealtime already created today"
             id = -1;
         }
-        else
+        elsejs
+Variable name capitalization bug fix
+9 hours ago
         {
             try  
             {               
@@ -790,7 +792,9 @@ app.post('/api/register', async (req, res, next) =>
 
         var meals = [];
 
-        for (let i = 0; i < info.length; i++)
+        for (let i = 0; i < info.length; i++)js
+Variable name capitalization bug fix
+9 hours ago
         {
             meals.push(ObjectId(info[i].mealId))
         }
@@ -1172,7 +1176,9 @@ app.post('/api/register', async (req, res, next) =>
     {  
         // incoming: userId, range (of results wanted [7/30/365 etc]), jwtToken
         // outgoing: results[], error  
-        var error = '';  
+        var error = '';
+	var ress = [];
+        var meals1 = [];
         const { userId, range, jwtToken } = req.body; 
         
         
@@ -1185,13 +1191,28 @@ app.post('/api/register', async (req, res, next) =>
 
         const db = client.db();
         var dat2 = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
-        const results = await db.collection('Mealtime').find({"Date":{$gt: dat2}, "UserId":userId}).toArray();
+        const results = await db.collection('Mealtime').find({"Date":{$gte: dat2}, "UserId":userId}).toArray();
         var _ret = [];
 
         for( var i=0; i<results.length; i++ )  
         {    
-            _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "mealtimeId":results[i]._id, "Meals":results[i].Meals});  
+            for (let j = 0; j < results[i].Meals.length; j++)
+            {
+                meals1.push(ObjectId(results[i].Meals[j].mealId));
+            }
+
+            ress = await db.collection('Meals').find({"_id": {$in : meals1}}).toArray();
+            meals1 = [];
+            for (let k = 0; k < ress.length; k++)
+            {
+                ress[k].amountConsumed = results[i].Meals[k].amountConsumed;
+            }
+
+            _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "mealtimeId":results[i]._id, "Meals":ress});
+
+            ress = [];
         }
+	    
         refreshedToken = jwt.refresh(jwtToken);
         var ret = {results:_ret, token:refreshedToken, error:error};  
         res.status(200).json(ret);
