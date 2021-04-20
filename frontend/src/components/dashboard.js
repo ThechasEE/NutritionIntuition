@@ -269,7 +269,9 @@ const Dashboard = () =>
                         </div>
                         <div class="second-div">
                         <h1>Hello, {firstName}</h1>
-                        <h2>Here are today's stats.</h2>
+                        {
+                            (daily) ? <h2>Here are today's stats.</h2> : <div className="no-meal-text">No meals today, go add some!</div>
+                        }
                             {meals && meals.map((meal) => (
                                 <div class="today-preview" key={meal.id}>
                                     {/*template string ` ` allows variables (JS) using $*/}
@@ -301,7 +303,9 @@ const Dashboard = () =>
                         <MealManagementComponent/>
                         </div>
                         <div class="third-div">
-                            <h1>This week's meal cards</h1>
+                            {
+                                (graphs) ? <h1>This week's meal cards</h1> : <div/>
+                            }
                             <DailyMealList title="Meals Test" range={7}/>
                         </div>
 
