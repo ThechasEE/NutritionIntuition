@@ -171,7 +171,7 @@ function Statistics()
             exportEnabled: true,
             animationEnabled: true,
             title: {
-                text: "Current Nutrition Breakdown"
+                text: "Total Nutrition Breakdown"
             },
             data: [{
                 type: "pie",
