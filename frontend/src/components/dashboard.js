@@ -265,7 +265,7 @@ const Dashboard = () =>
                                         <h2>{meal.date}</h2>
                                         <h2>Total calories: {meal.totalCalCount}</h2>
                                         <h3>Total Fat: {meal.totalFatCount}g</h3>
-                                        <h3>Total Sodium: {meal.totalSodiumCount}g</h3>
+                                        <h3>Total Sodium: {meal.totalSodiumCount}mg</h3>
                                         <h3>Total Carbs: {meal.totalCarbCount}g</h3>
                                         <h3>Total Protein: {meal.totalProteinCount}g</h3>
                                         {console.log(meal)}
