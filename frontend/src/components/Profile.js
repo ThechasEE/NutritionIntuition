@@ -59,16 +59,6 @@ function Profile()
     {
         setUpdateMessage("");
 
-        Update.vars.login = "";
-        Update.vars.firstName = "";
-        Update.vars.lastName = "";
-        Update.vars.age = "";
-        Update.vars.weight = "";
-        Update.vars.goalWeight = "";
-        Update.vars.calorieGoal = "";
-        Update.vars.height = "";
-        Update.vars.gender = "";
-
         var obj = {
             userId: ud.payload.userId,
             jwtToken: tok
@@ -218,17 +208,17 @@ function Profile()
                             <div className="profile-text">Last Name</div>
                             <input className="input profile-input-constraint" type="text" required placeholder="Last Name" ref={(c) => (c !== null) ? Update.form.lastName = c : null} defaultValue={Update.vars.lastName}/>
                             <div className="profile-text">Age</div>
-                            <input className="input profile-input-constraint" type="number" required placeholder="Age" ref={(c) => (c !== null) ? Update.form.age = c : null} defaultValue={Update.vars.age}/>
+                            <input className="input profile-input-constraint" type="number" step="1" required placeholder="Age" ref={(c) => (c !== null) ? Update.form.age = c : null} defaultValue={Update.vars.age}/>
                             <div className="profile-text">Weight (lbs)</div>
-                            <input className="input profile-input-constraint" type="number" required placeholder="Weight (lbs)" ref={(c) => (c !== null) ? Update.form.weight = c : null} defaultValue={Update.vars.weight}/>
+                            <input className="input profile-input-constraint" type="number" step="1" required placeholder="Weight (lbs)" ref={(c) => (c !== null) ? Update.form.weight = c : null} defaultValue={Update.vars.weight}/>
                         </div>
                         <div className="profile-flex">
                             <div className="profile-text">Height (in)</div>
-                            <input className="input profile-input-constraint" type="number" required placeholder="Height (in)" ref={(c) => (c !== null) ? Update.form.height = c : null} defaultValue={Update.vars.height}/>
+                            <input className="input profile-input-constraint" type="number" step="1" required placeholder="Height (in)" ref={(c) => (c !== null) ? Update.form.height = c : null} defaultValue={Update.vars.height}/>
                             <div className="profile-text">Weight Goal (lbs)</div>
-                            <input className="input profile-input-constraint" type="number" required placeholder="Weight Goal (lbs)" ref={(c) => (c !== null) ? Update.form.goalWeight = c : null} defaultValue={Update.vars.goalWeight}/>
+                            <input className="input profile-input-constraint" type="number" step="1" required placeholder="Weight Goal (lbs)" ref={(c) => (c !== null) ? Update.form.goalWeight = c : null} defaultValue={Update.vars.goalWeight}/>
                             <div className="profile-text">Calorie Goal</div>
-                            <input className="input profile-input-constraint" type="number" required placeholder="Calorie Goal" ref={(c) => (c !== null) ? Update.form.calorieGoal = c : null} defaultValue={Update.vars.calorieGoal}/>
+                            <input className="input profile-input-constraint" type="number" step="1" required placeholder="Calorie Goal" ref={(c) => (c !== null) ? Update.form.calorieGoal = c : null} defaultValue={Update.vars.calorieGoal}/>
                             <div className="profile-text">Gender</div>
                             <select className="profile-dropdown profile-select-constraint"  ref={(c) => (c !== null) ? Update.form.gender = c : null} defaultValue={Update.vars.gender}>
                                 <option value="male">Male</option>

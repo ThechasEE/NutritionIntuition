@@ -371,11 +371,11 @@ function LoginRegister()
         {
             if (Variables.registerVars.gender.value !== "Female")
             {
-                Variables.registerVars.calorieGoal = parseFloat(((Number(Variables.registerVars.weight.value) * 1.1) * 12).toFixed(2));
+                Variables.registerVars.calorieGoal = Math.floor(((Number(Variables.registerVars.weight.value) * 1.1) * 12));
             }
             else
             {
-                Variables.registerVars.calorieGoal = parseFloat(((Number(Variables.registerVars.weight.value) * 12)).toFixed(2));
+                Variables.registerVars.calorieGoal = Math.floor((Number(Variables.registerVars.weight.value) * 12));
             }
         }
 
