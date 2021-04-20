@@ -138,7 +138,7 @@ const DailyMealList = ({data: title, range}) => {
                         {console.log(meal)}
                         {/* now we cycle through the meals this day*/}
                         <br></br>
-                        <h2>Meals Eaten:</h2>
+                        <h2>Food consumed:</h2>
                         {meal.Meals.map((mealConsumed) => (
                             //search db for this meal id.
                             <div className= {"mealsConsumed-norm mealsConsumed-preview"} >

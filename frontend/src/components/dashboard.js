@@ -137,11 +137,9 @@ const Dashboard = () => {
             <div className="App">
                 {<Navbar/>}
                 <div className="dashboard">
-
-
                         <div class="first-div">
 
-                            WIP
+                            WIP - Graphs
                         </div>
                         <div class="second-div">
                         <h1>Hello, {firstName}</h1>
@@ -153,7 +151,7 @@ const Dashboard = () => {
                                         <img src={"https://media.tenor.com/images/851291ba1b6c8094b74169b70691c72f/tenor.gif"} width={200} height={200}></img>
                                         <h2>Total calories: {meal.totalCalCount}</h2>
                                         <h3>Total Fat: {meal.totalFatCount}g</h3>
-                                        <h3>Total Sodium: {meal.totalSodiumCount}g</h3>
+                                        <h3>Total Sodium: {meal.totalSodiumCount}mg</h3>
                                         <h3>Total Carbs: {meal.totalCarbCount}g</h3>
                                         <h3>Total Protein: {meal.totalProteinCount}g</h3>
                                         {console.log(meal)}

@@ -52,25 +52,23 @@ const HistoryPage = () => {
             <div className="App">
                 {<Navbar/>}
                 <div className="dashboard">
-                    WIP
                     <h1>Hello, {firstName}</h1>
+                    <h2>Here are your meal cards for the last 30 days.</h2>
+                    {/*<form>*/}
+                    {/*    <label>Please let us know how many days you want to view:</label>*/}
+                    {/*    <br/>*/}
+                    {/*    <input*/}
+                    {/*        type="text"*/}
+                    {/*        required*/}
+                    {/*        value={localRange}*/}
+                    {/*        //allows us to get the html data and save it in our title*/}
+                    {/*        onChange={(e) => setLocalRange(e.target.value)}*/}
+                    {/*    />*/}
 
-                    <form>
-                        <label>Please let us know how many days you want to view:</label>
-                        <br/>
-                        <input
-                            type="text"
-                            required
-                            value={localRange}
-                            //allows us to get the html data and save it in our title
-                            onChange={(e) => setLocalRange(e.target.value)}
-                        />
+                    {/*    {<button>Submit</button>}*/}
 
-                        {<button>Submit</button>}
-
-                    </form>
-                    {console.log("the local range is: " + localRange)}
-                    {<DailyMealList title="Meals Test" range={localRange}/>}
+                    {/*</form>*/}
+                    {<DailyMealList title="Meals Test" range={30}/>}
 
 
                 </div>
