@@ -364,13 +364,19 @@ function LoginRegister()
             return false;
         }
 
+        var gender = (' ' + Variables.registerVars.gender.value).slice(1);
+
         // Assign the calorie goal.
-        if (Variables.registerVars.calorieGoal !== null)
+        if (Variables.registerVars.calorieGoal != null)
         {
             if (Variables.registerVars.gender.value !== "Female")
-                Variables.registerVars.calorieGoal.value = (Number(Variables.registerVars.weight.value) * 1.1) * 12;
+            {
+                Variables.registerVars.calorieGoal = (Number(Variables.registerVars.weight.value) * 1.1) * 12;
+            }
             else
-                Variables.registerVars.calorieGoal.value = Number(Variables.registerVars.weight.value) * 12;
+            {
+                Variables.registerVars.calorieGoal = Number(Variables.registerVars.weight.value) * 12;
+            }
         }
 
         // No errors reported.
@@ -497,7 +503,7 @@ function LoginRegister()
             <img className="image" src={logo} alt="Not found"/>
             <div className="register-header">Register: Step 3</div>
             <div className="register-black-text">Calorie goal reccomended based on your profile:</div>
-            <input className="input" type="number" placeholder="Calorie Goal" ref={(c) => (c !== null) ? Variables.registerVars.calorieGoal = c : null} defaultValue={Variables.registerVars.calorieGoal === null ? "" : Variables.registerVars.calorieGoal.value}/>
+            <input className="input" type="number" placeholder="Calorie Goal" ref={(c) => (c !== null) ? Variables.registerVars.calorieGoal = c : null} defaultValue={Variables.registerVars.calorieGoal === null ? "" : ((typeof(Variables.registerVars.calorieGoal) === "number") ? Variables.registerVars.calorieGoal : Variables.registerVars.calorieGoal.value)}/>
             <input className="input" type="number" placeholder="Weight Goal" ref={(c) => (c !== null) ? Variables.registerVars.weightGoal = c : null} defaultValue={Variables.registerVars.weightGoal === null ? "" : Variables.registerVars.weightGoal.value}/>
             <button className="login-register-button-big" type="submit" onClick={doRegisterGoal}>Finalize Registration</button>
             <div className="form-error-text">{registerGoalMessage}</div>
