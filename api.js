@@ -1191,7 +1191,7 @@ Variable name capitalization bug fix
 
         const db = client.db();
         var dat2 = new Date(Date.now() - range * 24 * 60 * 60 * 1000);
-        const results = await db.collection('Mealtime').find({"Date":{$gte: dat2}, "UserId":userId}).toArray();
+        const results = await db.collection('Mealtime').find({"Date":{$gte: dat2}, "UserId":userId}).sort("Date", -1).toArray();
         var _ret = [];
 
         for( var i=0; i<results.length; i++ )  
