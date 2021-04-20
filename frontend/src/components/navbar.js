@@ -90,6 +90,16 @@ const Navbar = () => {
             <div className="links">
                 <li>
                     <Link to={{
+                        pathname: '/dashboard',
+                    }}
+                          style={{
+                              color: "gray",
+                              borderRadius: '12px'
+                          }}
+                    >Dashboard</Link>
+                </li>
+                <li>
+                    <Link to={{
                         pathname: '/addMeal',
                     }}
                           style={{
