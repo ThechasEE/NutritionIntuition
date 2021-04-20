@@ -19,6 +19,11 @@
 
 }
 
+.graph-padding
+{
+    padding: 50px;
+}
+
 .content {
 
     max-width: 600px;
@@ -193,6 +198,8 @@
 
     text-align: center;
 
+    padding-top: 20px;
+
 }
 
 .create label {
@@ -243,6 +250,11 @@
 
     cursor: pointer;
 
+}
+
+.dashboard
+{
+    padding-top: 20px;
 }
 
 .create .links{
@@ -323,4 +335,11 @@
 }
 .today-preview p{
     color: cornflowerblue;
+}
+
+.no-meal-text
+{
+    color: red;
+    font-weight: bold;
+    font-size: 20px;
 }
