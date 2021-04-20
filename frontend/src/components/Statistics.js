@@ -233,7 +233,7 @@ function Statistics()
                     <div>
                         <div className="statistics-header">Totals</div>
                         <div><strong>Meals:</strong> <strong>{Graph.mealVars.numMeals}</strong></div>
-                        <div><strong>Calories:</strong> <strong>{Graph.mealVars.calories}</strong><strong>g</strong></div>
+                        <div><strong>Calories:</strong> <strong>{Graph.mealVars.calories}</strong></div>
                         <div><strong>Carbohydrates:</strong> <strong>{Graph.mealVars.carbs}</strong><strong>g</strong></div>
                         <div><strong>Protein:</strong> <strong>{Graph.mealVars.protein}</strong><strong>g</strong></div>
                         <div><strong>Sodium:</strong> <strong>{Graph.mealVars.sodium}</strong><strong>mg</strong></div>

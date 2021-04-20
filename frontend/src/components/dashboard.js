@@ -24,6 +24,7 @@ const Dashboard = () =>
     const ud = jwt.decode(tok, {complete: true});
     const [error, setError] = useState(null);
     const [graphs, setGraphs] = useState(null);
+    const [daily, setDaily] = useState(null);
     const [isPending, setIsPending] = useState(false);
     const [todayMealExists, setTodayMealExists] = useState(false);
     const firstName = ud.payload.firstName;
@@ -127,47 +128,55 @@ const Dashboard = () =>
                             }
                         })
 
-                        var temp = data.results[0];
-                        var carbs = (temp.length === 0) ? 0 : temp.totalCarbCount;
-                        var protein = (temp.length === 0) ? 0 : temp.totalProteinCount;
-                        var fat = (temp.length === 0) ? 0 : temp.totalFatCount;
-                        var total = carbs + protein + fat;
+                        if (data.results.length !== 0)
+                        {
+                            var temp = data.results[0];
+                            var carbs = (temp.length === 0) ? 0 : temp.totalCarbCount;
+                            var protein = (temp.length === 0) ? 0 : temp.totalProteinCount;
+                            var fat = (temp.length === 0) ? 0 : temp.totalFatCount;
+                            var total = carbs + protein + fat;
 
-                        console.log(temp);
+                            Dash.graphs.propertiesDaily = {
+                                exportEnabled: true,
+                                animationEnabled: true,
+                                title: {
+                                    text: "Day"
+                                },
+                                data: [{
+                                    type: "pie",
+                                    startAngle: 75,
+                                    toolTipContent: "<b>{label}</b>: {y}%",
+                                    showInLegend: "true",
+                                    legendText: "{label}",
+                                    indexLabelFontSize: 16,
+                                    indexLabel: "{label} - {y}%",
+                                    dataPoints: [
+                                        { y: parseFloat(((total <= 0) ? 0 : (carbs / total) * 100).toFixed(3)), label: "Carbohydrates" },
+                                        { y: parseFloat(((total <= 0) ? 0 : (fat / total) * 100).toFixed(3)), label: "Fat" },
+                                        { y: parseFloat(((total <= 0) ? 0 : (protein / total) * 100).toFixed(3)), label: "Protein" }
+                                    ]
+                                }]
+                            };
 
-                        Dash.graphs.propertiesDaily = {
-                            exportEnabled: true,
-                            animationEnabled: true,
-                            title: {
-                                text: "Day"
-                            },
-                            data: [{
-                                type: "pie",
-                                startAngle: 75,
-                                toolTipContent: "<b>{label}</b>: {y}%",
-                                showInLegend: "true",
-                                legendText: "{label}",
-                                indexLabelFontSize: 16,
-                                indexLabel: "{label} - {y}%",
-                                dataPoints: [
-                                    { y: parseFloat(((total <= 0) ? 0 : (carbs / total) * 100).toFixed(3)), label: "Carbohydrates" },
-                                    { y: parseFloat(((total <= 0) ? 0 : (fat / total) * 100).toFixed(3)), label: "Fat" },
-                                    { y: parseFloat(((total <= 0) ? 0 : (protein / total) * 100).toFixed(3)), label: "Protein" }
-                                ]
-                            }]
-                        };
+                            setDaily(true);
+                        }
+                        else
+                        {
+                            setDaily(false);
+                        }
 
-                        console.log(data.results);
                         setMeals(data.results);
                     }
                     else
                     {
+                        console.log(data.error);
                         setMeals('');
                     }//store the meal data
 
                     setIsPending(false);
                     setError(null);
                 }).catch((err) => {
+                    console.log(err);
                     //check for our abort check
                     setIsPending(false);
                     setError(err.message);
@@ -237,8 +246,10 @@ const Dashboard = () =>
         const DisplayStatistics = () =>
         (
             <div>
-                <div className="graph-padding">
-                    <CanvasJSReact.CanvasJSChart options={Dash.graphs.propertiesDaily} />
+                <div>
+                    {
+                        (daily) ? <CanvasJSReact.CanvasJSChart className="graph-padding" options={Dash.graphs.propertiesDaily} /> : <div/>
+                    }
                 </div>
                 <div className="graph-padding">
                     <CanvasJSReact.CanvasJSChart options={Dash.graphs.propertiesWeekly} />
