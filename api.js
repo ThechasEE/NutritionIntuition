@@ -1382,8 +1382,8 @@ Variable name capitalization bug fix
             return;
         }
 
-        const ress = await db.collection('Meals').find({"_id": {$in : meals1}}).toArray();
-		
+        const ress = await db.collection('Meals').find({"_id": ObjectId(mealId)}).toArray();
+		/*
 		if (ress[index].Calories > 0)
 		{
 			totalCal -= (ress[index].Calories * meals[index].amountConsumed);
@@ -1404,6 +1404,12 @@ Variable name capitalization bug fix
 		{
 			totalProtein -= (ress[index].Protein * meals[index].amountConsumed);
 		}
+	    */
+		totalCal -= (ress[0].Calories * meals[index].amountConsumed);
+		totalFat -= (ress[0].TotalFat * meals[index].amountConsumed);
+		totalSodium -= (ress[0].Sodium * meals[index].amountConsumed);
+		totalCarbs -= (ress[0].TotalCarbs * meals[index].amountConsumed);
+		totalProtein -= (ress[0].Protein * meals[index].amountConsumed);
 		
 		meals.splice(index, 1);
 		
