@@ -326,8 +326,8 @@ const CreateMeal = () => {
             {<Navbar/>}
             <div className="create">
 
-            <h2>Add an existing meal by searching below:</h2>
             <form onSubmit={ SearchMealByExistingName }>
+                <h2>Add an existing meal by searching below:</h2>
                 <input
                     type="text"
                     required

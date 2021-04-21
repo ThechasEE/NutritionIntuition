@@ -180,7 +180,7 @@ const SearchResults = ({data: meals}) => {
             {meals.results && <h3> Results: </h3>}
             {meals.results && meals.results.map((meal) => (
                 <div>
-                    <p>{meal.Name}
+                    <p className="display-padding"><div>{meal.Name}</div>
                     {<button type="submit" onClick={(e) => {AddExistingMeal(e, meal)}}>Add Meal</button>}
                 </p>
                 </div>
