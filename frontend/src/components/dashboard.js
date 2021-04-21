@@ -29,6 +29,7 @@ const Dashboard = () =>
     const [todayMealExists, setTodayMealExists] = useState(false);
     const firstName = ud.payload.firstName;
     const[meals, setMeals] = useState('');
+    const [update, setUpdate] = useState('');
 
     if (ud != null)
     {
@@ -191,6 +192,42 @@ const Dashboard = () =>
             }, [])
         }
 
+        const DeleteMealTimeMeal = async (e, meal, mealConsumed) => {
+            console.log(meal)
+            console.log(mealConsumed._id)
+            //prevents page inputs from being refreshed
+            e.preventDefault();
+            //create a meal
+            var mealToDel = {
+                mealtimeId:meal.mealtimeId,
+                mealId: mealConsumed._id,
+                jwtToken: tok
+            };
+
+            try {
+                const response = await fetch(bp.buildPath("api/removemealtimemeal"), {
+                    method: 'POST',
+                    //we are sending json data
+                    headers: {"Content-Type": "application/json"},
+                    //actual data we are sending with this request
+                    body: JSON.stringify(mealToDel)
+                })
+                var responseObj = JSON.parse(await response.text());
+
+                if(responseObj.error !==  ''){
+                    console.log("failed to delete meal")
+
+                }else{
+                    window.location.reload(false);
+                }
+
+            }catch(e){
+                console.log("error bro")
+            }
+
+        }
+
+
         const checkIfMealExistsToday = () => {
             //collect data for components
             var obj = {
@@ -285,10 +322,9 @@ const Dashboard = () =>
                                         {/* now we cycle through the meals this day*/}
                                         <br></br>
                                         <h2>Today's Meals:</h2>
-                                        {meal.Meals.map((mealConsumed) => (
+                                    {meal.Meals.map((mealConsumed) => (
                                             //search db for this meal id.
-                                            <div >
-                                                {console.log(mealConsumed)}
+                                        <div onClick={ (e) => {DeleteMealTimeMeal(e, meal, mealConsumed)} } className= {"mealsConsumed-norm mealsConsumed-preview"} >
                                                 <h4>{mealConsumed.Name}</h4>
                                                 <p>{mealConsumed.Calories} calories</p>
                                                 <p>{mealConsumed.Protein}g Protein</p>

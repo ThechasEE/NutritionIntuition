@@ -129,7 +129,7 @@ const DailyMealList = ({data: title, range}) => {
                 <div className="meal-preview" key={meal.id}>
                     {/*template string ` ` allows variables (JS) using $*/}
                     <Link to={`/meals/${meal.id}`}>
-                        <h2>{meal.date}</h2>
+                        <h2>{meal.Date.substring(0,10)}</h2>
                         <h3>Total calories: {meal.totalCalCount}</h3>
                         <p>Total Fat: {meal.totalFatCount}g</p>
                         <p>Total Sodium: {meal.totalSodiumCount}g</p>

@@ -5,12 +5,14 @@ import {Link} from "react-router-dom";
 import FetchData from "./fetchComponent";
 import addMealDay from "./addMealDay";
 import Navbar from "./navbar";
+import SearchResults from "./DisplaySearchResults";
 
 class Variables extends React.Component
 {
     static mealStuff = {
         mealId: "",
-        mealtimeId: ""
+        mealtimeId: "",
+        searchedMeals: []
     }
 }
 
@@ -29,6 +31,8 @@ const CreateMeal = () => {
 
     //define values for meal; setters and getters
     const [name, setName] = useState('');
+    const [searchName, setSearchName] = useState('');
+    const [resultsGotten, setResultsGotten] = useState(false);
     //const [userId, setUserId] = useState(userId);
     const [calories, setCalories] = useState('');
     const [servingSize, setServingSize] = useState('');
@@ -36,7 +40,7 @@ const CreateMeal = () => {
     const [sodium, setSodium] = useState('');
     const [totalCarbs, setTotalCarbs] = useState('');
     const [protein, setProtein] = useState('');
-
+    const [failedToAdd, setFailedToAdd] = useState(false);
     const [isPending, setIsPending] = useState(false);
     const [error,setError] = useState(null);
 
@@ -144,6 +148,7 @@ const CreateMeal = () => {
                 console.log("Added meal" + Variables.mealStuff.mealId + " to " + Variables.mealStuff.mealtimeId + " successfully.");
 
             } else {
+                setFailedToAdd(true);
                 console.log("Meal " + Variables.mealStuff.mealId + " failed to add.");
             }
 
@@ -239,88 +244,42 @@ const CreateMeal = () => {
     }
 
     // //Functional
-    // function SearchMealByNameClosetMatch () {
-    //
-    //
-    //     console.log("Searching for: " + name);
-    //
-    //     //prevents page inputs from being refreshed
-    //     //e.preventDefault();
-    //     //get a meal from id (send)
-    //     var search = {
-    //         userId: userId,
-    //         search: name,
-    //         jwtToken: tok
-    //     };
-    //
-    //     setIsPending(true);
-    //
-    //     fetch(bp.buildPath("api/searchmealname"), {
-    //         method: 'POST',
-    //         //we are sending json data
-    //         headers: {"Content-Type": "application/json"},
-    //         //actual data we are sending with this request
-    //         body: JSON.stringify(search)
-    //     }).then(res => {
-    //         if(!res.ok){
-    //             throw Error('could not fetch the data from that resource');
-    //             //is thrown to our catch below
-    //         }
-    //         //resolution of the promise
-    //         return res.json();
-    //     })
-    //         .then(data => {
-    //             console.log("Our search result: " + data.results[0].mealId);
-    //             //we found it, lets populate these values
-    //             setMeal(data)
-    //             setMealId(data[0].id)
-    //             setIsPending(false);
-    //             setError(null);
-    //         })
-    //         .catch((err) => {
-    //             //check for our abort check
-    //             setIsPending(false);
-    //             setError(err.message);
-    //
-    //         })
-    //
-    //
-    //     // const { data: results, token, error} = FetchData(bp.buildPath("api/searchmealname"), search)
-    //
-    //
-    //
-    //
-    //
-    //
-    //
-    //     // try {
-    //     //     const response = fetch(bp.buildPath("api/searchmealname"), {
-    //     //         method: 'POST',
-    //     //         //we are sending json data
-    //     //         headers: {"Content-Type": "application/json"},
-    //     //         //actual data we are sending with this request
-    //     //         body: JSON.stringify(search)
-    //     //     })
-    //     //     //get return value from server
-    //     //     const responseObj = JSON.parse(response.text());
-    //     //     //gets the best result.
-    //     //     if(responseObj[0] != null){
-    //     //         setMeal(responseObj[0]);
-    //     //     }else{
-    //     //         setMeal(null);
-    //     //     }
-    //     //
-    //     //     if(responseObj[0] != null) {
-    //     //         setMealId(responseObj[0].mealId)
-    //     //     }else{
-    //     //         setMealId(null)
-    //     //     }
-    //     //
-    //     // }catch (e){
-    //     //     //TODO error checking?
-    //     //     setMealId(null);
-    //     // }
-    // }
+    const SearchMealByExistingName = async (e) => {
+        e.preventDefault();
+
+
+        console.log("Searching for: " + searchedMealName);
+
+        //prevents page inputs from being refreshed
+        //get a meal from id (send)
+        var search = {
+            userId: userId,
+            search: searchedMealName,
+            jwtToken: tok
+        };
+        try {
+            const response = await fetch(bp.buildPath("api/searchmealname"), {
+                method: 'POST',
+                //we are sending json data
+                headers: {"Content-Type": "application/json"},
+                //actual data we are sending with this request
+                body: JSON.stringify(search)
+            })
+            var responseObj = JSON.parse(await response.text());
+
+            if(responseObj.error ===  ''){
+                //added meal successfully
+                Variables.mealStuff.searchedMeals = responseObj;
+
+            }else {
+                Variables.mealStuff.searchedMeals = responseObj;
+
+            }
+
+        }catch(e){
+            console.log("error bro ewrase")
+        }
+    }
 
 
 
@@ -360,22 +319,26 @@ const CreateMeal = () => {
     }
 
 
+
+
     return (
         <div>
             {<Navbar/>}
             <div className="create">
 
             <h2>Add an existing meal by searching below:</h2>
-            <form onSubmit={ AddMeal }>
+            <form onSubmit={ SearchMealByExistingName }>
                 <input
                     type="text"
                     required
-                    value={name}
+                    value={searchedMealName}
                     //allows us to get the html data and save it in our title
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => setSearchedMealName(e.target.value)}
                 />
-
+                { !isPending && <button>Search Meal</button>}
+                { isPending && <button disabled>Searching...</button>}
             </form>
+                {<SearchResults data={Variables.mealStuff.searchedMeals}></SearchResults>}
             <h3>Or</h3>
             <h2>Add a new Meal</h2>
             <form onSubmit={ AddMeal }>
@@ -437,7 +400,7 @@ const CreateMeal = () => {
                 />
                 { !isPending && <button>Add New Meal</button>}
                 { isPending && <button disabled>Adding new meal...</button>}
-
+                {failedToAdd && <p>Meal Already exists!</p>}
             </form>
         </div>
         </div>
