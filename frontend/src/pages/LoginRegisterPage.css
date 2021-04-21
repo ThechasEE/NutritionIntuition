@@ -49,6 +49,8 @@ video
 
 .form-error-text
 {
+	background-color: var(--off-white);
+	border-radius: 5px;
 	text-align: center;
 	color: var(--error);
 	word-wrap: break-word;
