@@ -171,7 +171,7 @@ function Statistics()
             exportEnabled: true,
             animationEnabled: true,
             title: {
-                text: "Total Nutrition Breakdown"
+                text: "Total Nutrition Breakdown - " + (today.getMonth() + 1) + "/" + today.getDate()
             },
             data: [{
                 type: "pie",
