@@ -1168,7 +1168,7 @@ Variable name capitalization bug fix
         }
 
         refreshedToken = jwt.refresh(jwtToken);
-        var ret = { id:id, totalCal:totalCal, totalFat:totalFat, totalSodium:totalSodium, totalCarbs:totalCarbs, totalProtein:totalProtein, date:mealDate, meals:ress.reverse(), token:refreshedToken, error:error};  
+        var ret = { id:id, totalCal:totalCal, totalFat:totalFat, totalSodium:totalSodium, totalCarbs:totalCarbs, totalProtein:totalProtein, date:mealDate, meals:ress, token:refreshedToken, error:error};  
         res.status(200).json(ret);
     });
 
@@ -1208,7 +1208,7 @@ Variable name capitalization bug fix
                 ress[k].amountConsumed = results[i].Meals[k].amountConsumed;
             }
 
-            _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "mealtimeId":results[i]._id, "Meals":ress.reverse()});
+            _ret.push( {"Date":results[i].Date, "totalCalCount":results[i].totalCalCount, "totalFatCount":results[i].totalFatCount, "totalSodiumCount":results[i].totalSodiumCount, "totalCarbCount":results[i].totalCarbCount, "totalProteinCount":results[i].totalProteinCount, "mealtimeId":results[i]._id, "Meals":ress});
 
             ress = [];
         }
