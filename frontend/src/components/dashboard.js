@@ -306,7 +306,9 @@ const Dashboard = () =>
                             {
                                 (graphs) ? <h1>This week's meal cards</h1> : <div/>
                             }
-                            <DailyMealList title="Meals Test" range={7}/>
+                            <div className="dashboard-scroll">
+                                <DailyMealList title="Meals Test" range={7}/>
+                            </div>
                         </div>
 
                 </div>

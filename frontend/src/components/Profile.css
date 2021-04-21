@@ -56,7 +56,7 @@
 .profile-text
 {
     font-weight: bold;
-    padding-top: 10px;
+    padding-top: 5px;
 }
 
 .profile-title-error
@@ -78,4 +78,33 @@
     font-size: 30px;
     font-weight: bold;
     text-decoration: underline;
+}
+
+.profile-scroll
+{
+    overflow-y: scroll;
+    height: 650px;
+}
+
+.profile-history-header
+{
+    font-size: 30px;
+    padding: 10px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.profile-spacing
+{
+    margin: 10px 10px 0px 10px;
+}
+
+.profile-button-spacing
+{
+    margin-top: 0px;
+}
+
+.profile-text-spacing
+{
+    margin-top: 10px;
 }

@@ -344,3 +344,9 @@
     font-weight: bold;
     font-size: 20px;
 }
+
+.dashboard-scroll
+{
+    overflow-y: scroll;
+    max-height: 650px;
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "./navbar";
 import "./Profile.css";
+import DailyMealList from "./DailyMealList";
 
 class Update extends React.Component
 {
@@ -200,6 +201,7 @@ function Profile()
             <div className="profile-title">{Update.vars.firstName}'s Profile</div>
             <div className="profile-title-error">{updateMessage}</div>
             <div className="profile-container">
+                <div>
                 <form onSubmit={UpdateProfile}>
                     <div className="profile-update">
                         <div className="profile-flex">
@@ -228,17 +230,24 @@ function Profile()
                         </div>
                     </div>
                     <div className="profile-text-error">{profileMessage}</div>
-                    <button className="login-register-submit" type="submit">Update Profile</button>
+                    <button className="login-register-submit profile-button-spacing" type="submit">Update Profile</button>
                 </form>
                 <form className="profile-reset" onSubmit={ResetPassword}>
                     <div>
-                        <div className="profile-password-header">Password Reset:</div>
-                        <input required className="input profile-input-constraint" type="password" placeholder="New Password" ref={(c) => (c !== null) ? Update.password.password = c : null} defaultValue={Update.password.password === null ? "" : Update.password.password.value}/>
-                        <input required className="input profile-input-constraint" type="password" placeholder="Confirm New Password" ref={(c) => (c !== null) ? Update.password.passwordConfirm = c : null} defaultValue={Update.password.passwordConfirm === null ? "" : Update.password.passwordConfirm.value}/>
+                        <div className="profile-password-header profile-text-spacing">Password Reset:</div>
+                        <input required className="input profile-input-constraint profile-spacing" type="password" placeholder="New Password" ref={(c) => (c !== null) ? Update.password.password = c : null} defaultValue={Update.password.password === null ? "" : Update.password.password.value}/>
+                        <input required className="input profile-input-constraint profile-spacing" type="password" placeholder="Confirm New Password" ref={(c) => (c !== null) ? Update.password.passwordConfirm = c : null} defaultValue={Update.password.passwordConfirm === null ? "" : Update.password.passwordConfirm.value}/>
                         <div className="profile-text-error">{passwordMessage}</div>
-                        <button className="login-register-submit" type="submit">Reset Password</button>
+                        <button className="login-register-submit profile-button-spacing" type="submit">Reset Password</button>
                     </div>
                 </form>
+                </div>
+                <div>
+                    <div className="profile-history-header">Meal History</div>
+                    <div className="profile-scroll">
+                        {<DailyMealList title="Meals Test" range={30}/>}
+                    </div>
+                </div>
             </div>
         </div>
     )
