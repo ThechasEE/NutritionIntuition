@@ -350,3 +350,8 @@
     overflow-y: scroll;
     max-height: 750px;
 }
+
+.display-padding
+{
+    padding: 0px 0px 10px 0px;
+}

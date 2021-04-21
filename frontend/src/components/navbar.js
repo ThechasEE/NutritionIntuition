@@ -99,24 +99,6 @@ const Navbar = () => {
                     >Dashboard</Link>
                 </li>
                 <li>
-                    <Link to={{
-                        pathname: '/addMeal',
-                    }}
-                          style={{
-                              color: "gray",
-                              borderRadius: '12px'
-                          }}
-                    >Quick Add</Link>
-                </li>
-
-                <li>
-                    <Link to="/history" style={{
-                        color: "grey",
-                        //change to "Link to" instead of "a href" when you don't
-                        //want to talk to the server
-                    }}>History</Link>
-                </li>
-                <li>
                     <Link to="/statistics" style={{
                     color: "grey",
                     //change to "Link to" instead of "a href" when you don't

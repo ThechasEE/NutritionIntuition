@@ -11,7 +11,8 @@
 - sudo npm install mongodb
 - sudo npm install cors
 - sudo npm install --save @sendgrid/mail
-- **NEW:** sudo npm install md5
+- sudo npm install md5
+- sudo npm install react-confirm-alert --save
 
 ### Inside frontend directory:
 - sudo npm install react-router-dom

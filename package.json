@@ -18,6 +18,7 @@
         "jsonwebtoken": "^8.5.1",
         "md5": "^2.3.0",
         "mongodb": "^3.6.6",
+        "react-confirm-alert": "^2.7.0",
         "react-minimal-pie-chart": "^8.2.0"
     }
 }

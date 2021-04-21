@@ -7,6 +7,8 @@ import MealManagementComponent from "./addMealDay";
 import bp from "./bp";
 import React, {useEffect, useState} from "react";
 import CanvasJSReact from '../canvasjs.react.js';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 class Dash extends React.Component
 {
@@ -69,6 +71,10 @@ const Dashboard = () =>
             }).then(data => {
                 if (data.error === '')
                 {
+                    var today = new Date();
+                    var weekAgo = new Date(today.getTime());
+                    weekAgo.setDate(today.getDate() - 7);
+
                     fetch(bp.buildPath("api/searchmealtime"), {
                         method: 'POST',
                         //we are sending json data
@@ -105,7 +111,7 @@ const Dashboard = () =>
                                     exportEnabled: true,
                                     animationEnabled: true,
                                     title: {
-                                        text: "Week"
+                                        text: "Week | " + (weekAgo.getMonth() + 1) + "/" + weekAgo.getDate() + " - " + (today.getMonth() + 1) + "/" + today.getDate()
                                     },
                                     data: [{
                                         type: "pie",
@@ -141,7 +147,7 @@ const Dashboard = () =>
                                 exportEnabled: true,
                                 animationEnabled: true,
                                 title: {
-                                    text: "Day"
+                                    text: "Day - " + (today.getMonth() + 1) + "/" + today.getDate()
                                 },
                                 data: [{
                                     type: "pie",
@@ -192,11 +198,27 @@ const Dashboard = () =>
             }, [])
         }
 
+        const deleteMeal = (e, meal, mealConsumed) => {
+            confirmAlert({
+                title: 'Delete ' + mealConsumed.Name + "?",
+                buttons: [
+                    {
+                        label: 'Yes',
+                        onClick: () => DeleteMealTimeMeal(e, meal, mealConsumed)
+                        },
+                    {
+                        label: 'No'
+                    }
+                ]
+            });
+        }
+
         const DeleteMealTimeMeal = async (e, meal, mealConsumed) => {
             console.log(meal)
             console.log(mealConsumed._id)
             //prevents page inputs from being refreshed
             e.preventDefault();
+
             //create a meal
             var mealToDel = {
                 mealtimeId:meal.mealtimeId,
@@ -226,7 +248,6 @@ const Dashboard = () =>
             }
 
         }
-
 
         const checkIfMealExistsToday = () => {
             //collect data for components
@@ -324,7 +345,7 @@ const Dashboard = () =>
                                         <h2>Today's Meals:</h2>
                                     {meal.Meals.map((mealConsumed) => (
                                             //search db for this meal id.
-                                        <div onClick={ (e) => {DeleteMealTimeMeal(e, meal, mealConsumed)} } className= {"mealsConsumed-norm mealsConsumed-preview"} >
+                                        <div onClick={ (e) => {deleteMeal(e, meal, mealConsumed)} } className= {"mealsConsumed-norm mealsConsumed-preview"} >
                                                 <h4>{mealConsumed.Name}</h4>
                                                 <p>{mealConsumed.Calories} calories</p>
                                                 <p>{mealConsumed.Protein}g Protein</p>
@@ -352,4 +373,5 @@ const Dashboard = () =>
         );
     }
 }
+
 export default Dashboard;

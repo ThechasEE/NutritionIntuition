@@ -128,7 +128,6 @@ const DailyMealList = ({data: title, range}) => {
             {meals && meals.map((meal) => (
                 <div className="meal-preview" key={meal.id}>
                     {/*template string ` ` allows variables (JS) using $*/}
-                    <Link to={`/meals/${meal.id}`}>
                         <h2>{meal.Date.substring(0,10)}</h2>
                         <h3>Total calories: {meal.totalCalCount}</h3>
                         <p>Total Fat: {meal.totalFatCount}g</p>
@@ -141,7 +140,7 @@ const DailyMealList = ({data: title, range}) => {
                         <h2>Food consumed:</h2>
                         {meal.Meals.map((mealConsumed) => (
                             //search db for this meal id.
-                            <div className= {"mealsConsumed-norm mealsConsumed-preview"} >
+                            <div className= {"mealsConsumed-norm"} >
                                 {console.log(mealConsumed)}
                                 <h4>{mealConsumed.Name}</h4>
                                 <p>{mealConsumed.Calories} calories</p>
@@ -150,7 +149,6 @@ const DailyMealList = ({data: title, range}) => {
                                 <p>{mealConsumed.TotalCarbs}g Carbs</p>
                             </div>
                             ))}
-                    </Link>
                 </div>
             ))}
         </div>
